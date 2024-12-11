@@ -1,32 +1,32 @@
 name: Test
 
 on:
-  push:
-#    branches:
-#      - main
-  pull_request:
-    branches:
-      - main
+    push:
+    #    branches:
+    #      - main
+    pull_request:
+        branches:
+            - main
 
 jobs:
+    test:
+        name: Test code
+        runs-on: ubuntu-latest
 
-  test:
+        steps:
+            - name: Check out the code
+              uses: actions/checkout@v4
 
-    name: Test code
-    runs-on: ubuntu-latest
+            - name: Set up NodeJS
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
 
-    steps:
+            - name: Install dependencies
+              run: npm --prefix=api ci
 
-      - name: Check out the code
-        uses: actions/checkout@v4
+            - name: Tests linting
+              run: npm --prefix=api run eslint
 
-      - name: Set up NodeJS
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm --prefix=api ci
-
-      - name: Run tests
-        run: npm --prefix=api run test
+            - name: Run tests
+              run: npm --prefix=api run test
