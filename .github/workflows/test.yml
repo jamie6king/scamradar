@@ -17,13 +17,6 @@ jobs:
             mongo:
                 image: mongo:8
 
-                healthcheck:
-                    test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet
-                    interval: 10s
-                    timeout: 10s
-                    retries: 5
-                    start_period: 40s
-
         steps:
             - name: Check out the code
               uses: actions/checkout@v4
