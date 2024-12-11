@@ -45,5 +45,5 @@ jobs:
 
             - name: Run tests
               env:
-                  - MONGODB_URL: "mongodb://localhost:27017/scamradar_test"
+                  MONGODB_URL: "mongodb://localhost:27017/scamradar_test"
               run: npm --prefix=api run test
