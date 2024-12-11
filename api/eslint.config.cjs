@@ -41,10 +41,11 @@ module.exports = [
             "prettier/prettier": "error",
 
             // Custom ESLint rules
-            indent: ["error", 4],
+            "indent": ["error", 4],
             "linebreak-style": ["error", "unix"],
-            quotes: ["error", "double"], // Enforce double quotes
-            semi: ["error", "always"],
+            "quotes": ["error", "double"],
+            "quote-props": ["error", "always"],
+            "semi": ["error", "always"],
             "no-unused-vars": ["warn"],
             "no-console": "off",
 
