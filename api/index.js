@@ -11,6 +11,7 @@ function listenForRequests() {
     });
 }
 
+// eslint-disable-next-line promise/catch-or-return, promise/always-return
 connectToDatabase().then(() => {
     listenForRequests();
 });
