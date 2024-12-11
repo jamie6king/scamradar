@@ -25,7 +25,7 @@ app.use((_req, res) => {
 });
 
 // Error handler
-app.use((err, _req, res, _next) => {
+app.use((err, _req, res) => {
     console.error(err);
     if (process.env.NODE_ENV === "development") {
         res.status(500).send(err.message);
