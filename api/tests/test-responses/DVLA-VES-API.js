@@ -1,4 +1,4 @@
-const response200MockJSON = {
+const DVLAresponse200MockJSON = {
     registrationNumber: "AA19AAA",
     artEndDate: "2025-03-30",
     co2Emissions: 300,
@@ -21,7 +21,7 @@ const response200MockJSON = {
     realDrivingEmissions: "1",
 };
 
-const response404MockJSON = {
+const DVLAresponse404MockJSON = {
     errors: [
         {
             status: "404",
@@ -33,6 +33,6 @@ const response404MockJSON = {
 };
 
 module.exports = {
-    response200MockJSON,
-    response404MockJSON,
+    DVLAresponse200MockJSON,
+    DVLAresponse404MockJSON,
 };
