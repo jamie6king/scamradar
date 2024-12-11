@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
-const carRouter = require("./routes/car")
+const carRouter = require("./routes/car");
+const businessRouter = require("./routes/business");
 
 //const usersRouter = require("./routes/users");
 
@@ -16,6 +17,7 @@ app.use(express.json());
 
 // API Routes
 app.use("/car", carRouter);
+app.use("/business", businessRouter);
 
 // 404 Handler
 app.use((_req, res) => {
