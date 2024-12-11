@@ -67,8 +67,48 @@ async function getNewToken() {
   }
 }
 
-async function makeApiCall() {
-  await getNewToken();
+async function getMotInfo(req, res) {
+  try {
+    const token = await DvsaToken.findOne();
+
+    if (!token) {
+      return res.status(400).json({ message: "Token not found" });
+    }
+
+    const registration = req.params.registration;
+
+    const response = await fetch(
+      `https://history.mot.api.gov.uk/v1/trade/vehicles/registration/${registration}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token.access_token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return res.status(response.status).json({
+        message: "Error fetching MOT data",
+        error: errorText,
+      });
+    }
+    const data = await response.json();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error in test function:", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
 }
 
-makeApiCall();
+const DvsaController = {
+  getNewToken: getNewToken,
+  saveOrUpdateToken: saveOrUpdateToken,
+  getMotInfo: getMotInfo,
+};
+
+module.exports = DvsaController;
