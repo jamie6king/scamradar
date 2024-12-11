@@ -17,6 +17,9 @@ jobs:
             mongo:
                 image: mongo:8
 
+                ports:
+                    - "27017:27017"
+
         steps:
             - name: Check out the code
               uses: actions/checkout@v4
@@ -41,4 +44,6 @@ jobs:
                   done
 
             - name: Run tests
+              env:
+                  - MONGODB_URL: "mongodb://localhost:27017/scamradar_test"
               run: npm --prefix=api run test
