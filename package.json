@@ -1,0 +1,10 @@
+{
+    "name": "scamradar",
+    "version": "1.0.0",
+    "scripts": {
+        "install": "npm --prefix=api install",
+        "dev": "npm --prefix=api run dev",
+        "test": "npm --prefix=api run test",
+        "eslint": "npm --prefix=api run eslint"
+    }
+}
