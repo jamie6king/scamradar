@@ -29,4 +29,7 @@ jobs:
               run: npm --prefix=api run eslint
 
             - name: Run tests
+              env:
+                  DVLA_API_KEY: { { secrets.DVLA_API_KEY } }
+                  DVLA_URL: { { vars.DVLA_URL } }
               run: npm --prefix=api run test
