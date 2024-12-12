@@ -1,20 +1,11 @@
+/* eslint-disable no-undef */
 const mongoose = require("mongoose");
+const { connectToDatabase } = require("../db/db");
 
-async function connectToDatabase() {
-    const mongoDbUrl = process.env.MONGODB_URL;
+beforeAll(async () => {
+    await connectToDatabase();
+});
 
-    if (!mongoDbUrl) {
-        console.error(
-            "No MongoDB url provided. Make sure there is a MONGODB_URL environment variable set. See the README for more details."
-        );
-        throw new Error("No connection string provided");
-    }
-
-    await mongoose.connect(mongoDbUrl);
-
-    if (process.env.NODE_ENV !== "test") {
-        console.log("Successfully connected to MongoDB");
-    }
-}
-
-module.exports = { connectToDatabase };
+afterAll(async () => {
+    await mongoose.connection.close(true);
+});
