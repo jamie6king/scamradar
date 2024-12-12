@@ -14,12 +14,12 @@ const DvsaController = require("../controllers/Dvsa");
 // });
 
 router.get("/history/:registration", async (req, res) => {
-  try {
-    await DvsaController.getMotInfo(req, res);
-  } catch (error) {
-    console.error("Error fetching MOT history", error);
-    res.status(500).json({ message: "Error fetching MOT history" });
-  }
+    try {
+        await DvsaController.getMotInfo(req, res);
+    } catch (error) {
+        console.error("Error fetching MOT history", error);
+        res.status(500).json({ message: "Error fetching MOT history" });
+    }
 });
 
 module.exports = router;

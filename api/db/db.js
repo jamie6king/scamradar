@@ -2,7 +2,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 
 async function connectToDatabase() {
-  const mongoDbUrl = process.env.MONGODB_URL;
+    const mongoDbUrl = process.env.MONGODB_URL;
 
     if (!mongoDbUrl) {
         console.error(
@@ -11,11 +11,11 @@ async function connectToDatabase() {
         throw new Error("No connection string provided");
     }
 
-  await mongoose.connect(mongoDbUrl);
+    await mongoose.connect(mongoDbUrl);
 
-  if (process.env.NODE_ENV !== "test") {
-    console.log("Successfully connected to MongoDB");
-  }
+    if (process.env.NODE_ENV !== "test") {
+        console.log("Successfully connected to MongoDB");
+    }
 }
 
 module.exports = { connectToDatabase };
