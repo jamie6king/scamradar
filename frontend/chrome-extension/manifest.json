@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "ScamRadar Scraper",
+    "description": "Scrape information from listing page",
+    "version": "1.0",
+    "icons": {
+        "1": "images/icon.png"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": ["activeTab", "scripting", "storage"],
+    "host_permissions": ["https://www.ebay.co.uk/*"],
+    "action": {
+        "default_icon": "images/icon.png"
+    },
+    "commands": {
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Ctrl+B",
+                "mac": "Command+B"
+            }
+        }
+    }
+}

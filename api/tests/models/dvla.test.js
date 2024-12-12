@@ -1,7 +1,11 @@
 const DvlaResponse = require("../../models/dvla");
+require("../mongodb_helper");
 
 describe("dvlaResponse model", () => {
-    it("should create a DVLAResponse instance", async () => {
+    beforeEach(async () => {
+        await DvlaResponse.deleteMany({});
+    });
+    it("should create a DVLAResponse instance", () => {
         const record = new DvlaResponse({
             productId: "TEST123",
             response: {

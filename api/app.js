@@ -4,6 +4,7 @@ const carRouter = require("./routes/car");
 const businessRouter = require("./routes/business");
 
 //const usersRouter = require("./routes/users");
+const dvsaRouter = require("./routes/dvsa.js");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 // API Routes
 app.use("/car", carRouter);
 app.use("/business", businessRouter);
+app.use("/mot", dvsaRouter);
 
 // 404 Handler
 app.use((_req, res) => {

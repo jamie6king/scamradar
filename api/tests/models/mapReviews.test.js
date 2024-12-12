@@ -1,5 +1,4 @@
 const MapReview = require("../../models/mapReviews");
-const mongoose = require("mongoose");
 require("../mongodb_helper");
 
 describe("MapReviews model", () => {
