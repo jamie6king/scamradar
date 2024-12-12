@@ -3,9 +3,12 @@ const { Schema, Types } = mongoose;
 
 const MapReviewsSchema = new Schema(
     {
-        businessNumber: {
-            type: Number,
-            ref: "Company",
+        businessName: {
+            type: String,
+            required: true,
+        },
+        businessAddress: {
+            type: String,
             required: true,
         },
         averageRating: {
@@ -18,10 +21,6 @@ const MapReviewsSchema = new Schema(
         },
         mostRelevantReviews: {
             type: Object, // Would this be better as a nested schema? It was looking quite time consuming to create.
-            required: true,
-        },
-        address: {
-            type: String,
             required: true,
         },
         otherInfo: {
