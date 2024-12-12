@@ -1,3 +1,4 @@
+/* eslint-disable n/no-unsupported-features/node-builtins */
 const getDvlaJson = require("../../services/car");
 const jestFetchMock = require("jest-fetch-mock");
 const {
