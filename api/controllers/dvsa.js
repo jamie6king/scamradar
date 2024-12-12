@@ -1,6 +1,26 @@
 require("dotenv").config();
 const DvsaToken = require("../models/dvsa");
 
+async function getValidToken() {
+  let tokenData = await DvsaToken.findOne();
+
+  if (!tokenData) {
+    throw new Error("Token not found in database");
+  }
+
+  const currentTime = Date.now();
+  const tokenExpiryTime =
+    tokenData.last_update.getTime() + tokenData.expires_in * 1000;
+
+  if (currentTime >= tokenExpiryTime) {
+    console.log("Token expired, getting a new one....");
+    await getNewToken();
+    tokenData = await DvsaToken.findOne();
+  }
+
+  return tokenData.access_token;
+}
+
 async function saveOrUpdateToken(token, expiresIn) {
   try {
     const currentTime = Date.now();
@@ -12,7 +32,7 @@ async function saveOrUpdateToken(token, expiresIn) {
         tokenData.last_update.getTime() + tokenData.expires_in * 1000;
 
       if (expirationTime >= tokenExpiryTime) {
-        console.log("token expired, getting a new one....");
+        console.log("Token expired, getting a new one....");
         tokenData.access_token = token;
         tokenData.expires_in = expiresIn;
         tokenData.last_update = new Date();
@@ -54,26 +74,23 @@ async function getNewToken() {
     }
 
     const data = await response.json();
-
     const newAccessToken = data.access_token;
+    // console.log(newAccessToken);
     const expiresIn = data.expires_in;
 
     await saveOrUpdateToken(newAccessToken, expiresIn);
-
-    console.log("token refreshed and updated.");
-    console.log(newAccessToken);
+    console.log("Token refreshed and updated.");
+    return newAccessToken;
   } catch (error) {
-    console.error("error refreshed the token", error);
+    console.error("Error refreshing the token", error);
+    throw error;
   }
 }
 
 async function getMotInfo(req, res) {
   try {
-    const token = await DvsaToken.findOne();
-
-    if (!token) {
-      return res.status(400).json({ message: "Token not found" });
-    }
+    const accessToken = await getValidToken();
+    // console.log("access token:   ", accessToken);
 
     const registration = req.params.registration;
 
@@ -82,8 +99,9 @@ async function getMotInfo(req, res) {
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token.access_token}`,
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
+          "X-API-Key": process.env.API_KEY,
         },
       }
     );
@@ -95,6 +113,7 @@ async function getMotInfo(req, res) {
         error: errorText,
       });
     }
+
     const data = await response.json();
     return res.status(200).json(data);
   } catch (error) {
@@ -106,8 +125,8 @@ async function getMotInfo(req, res) {
 }
 
 const DvsaController = {
-  getNewToken: getNewToken,
-  saveOrUpdateToken: saveOrUpdateToken,
+  // getNewToken: getNewToken,
+  // saveOrUpdateToken: saveOrUpdateToken,
   getMotInfo: getMotInfo,
 };
 
