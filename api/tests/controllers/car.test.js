@@ -1,3 +1,4 @@
+/* eslint-disable n/no-unsupported-features/node-builtins */
 const request = require("supertest");
 const jestFetchMock = require("jest-fetch-mock");
 const app = require("../../app");
