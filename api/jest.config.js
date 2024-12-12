@@ -11,6 +11,7 @@ const config = {
         "!**/node_modules/**",
         "!**/test-responses/**",
         "!**/coverage/**",
+        "!**/*.config.js",
     ],
 };
 
