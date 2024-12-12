@@ -1,5 +1,4 @@
 const Listing = require("../../models/listing");
-const mongoose = require("mongoose");
 
 require("../mongodb_helper");
 
@@ -7,7 +6,7 @@ describe("Listing model", () => {
     beforeEach(async () => {
         await Listing.deleteMany({});
     });
-    it("correctly creates a listing", async() => {
+    it("correctly creates a listing", async () => {
         const listing = await new Listing({
             productId: "TEST123",
             title: "somecar",
