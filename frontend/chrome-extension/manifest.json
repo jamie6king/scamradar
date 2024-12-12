@@ -10,7 +10,10 @@
         "service_worker": "background.js"
     },
     "permissions": ["activeTab", "scripting", "storage"],
-    "host_permissions": ["https://www.ebay.co.uk/*"],
+    "host_permissions": [
+      "https://www.ebay.co.uk/*", 
+      "http://localhost:3000/"
+    ],
     "action": {
         "default_icon": "images/icon.png"
     },

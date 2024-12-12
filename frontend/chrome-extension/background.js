@@ -33,10 +33,43 @@ chrome.action.onClicked.addListener(async (tab) => {
     }
 });
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.type == "scrapedData") {
-        console.log("Data:", request);
-        sendResponse({ status: "Scraped Data received" });
+async function SendEbayCarData(body) {
+	const requestOptions = {
+	  method: "POST",
+	  headers: {
+		"Content-Type": "application/json",
+	  },
+	  body: JSON.stringify(body),
+	};
+  
+	const response = await fetch("http://localhost:3000/car", requestOptions);
+  
+	if (response.status !== 200) {
+		console.log(await response.json())
+	  throw new Error("Unable to send Ebay car data");
+	}
+  
+	return response;
+  }
+  
+
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+    if (message.type == "scrapedData") {
+        console.log("Data:", message);
+
+		
+        SendEbayCarData({registrationNumber: message.scrapedData.registrationNumber, 
+			vehicleData: message.scrapedData.vehicleData})
+            .then((response) => {
+                console.log("Car data sent successfully", response);
+                sendResponse({ success: true, data: response });
+            })
+            .catch((error) => {
+                console.error("Error sending data:", error);
+                sendResponse({ success: false, error: error.message });
+            });
+
         return true;
     }
 });
+
