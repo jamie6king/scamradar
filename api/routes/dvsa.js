@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const DvsaController = require("../controllers/Dvsa");
+const DvsaController = require("../controllers/dvsa");
 
 // leave this route for now..manually grabs a new access token.
 // router.post("/get-new-token", async (req, res) => {
