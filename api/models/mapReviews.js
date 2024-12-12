@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { Schema, Types } = mongoose;
+const { Schema } = mongoose;
 
 const MapReviewsSchema = new Schema(
     {
