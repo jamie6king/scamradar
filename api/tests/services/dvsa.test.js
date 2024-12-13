@@ -1,5 +1,5 @@
 /* eslint-disable n/no-unsupported-features/node-builtins */
-const { getMotInfo } = require("../../services/dvsa");
+const getMotInfo = require("../../services/dvsa");
 const jestFetchMock = require("jest-fetch-mock");
 jestFetchMock.enableMocks();
 beforeEach(() => {
@@ -12,10 +12,10 @@ afterEach(() => {
 
 describe("getMotInfo", () => {
     beforeAll(() => {
-        process.env.TOKEN_URL = "https://mock-token-url.com";
-        process.env.CLIENT_ID = "mockClientId";
-        process.env.CLIENT_SECRET = "mockClientSecret";
-        process.env.API_KEY = "mockApiKey";
+        process.env.DVSA_TOKEN_URL = "https://mock-token-url.com";
+        process.env.DVSA_CLIENT_ID = "mockClientId";
+        process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
+        process.env.DVSA_API_KEY = "mockApiKey";
     });
 
     test("should fetch MOT data for a valid reg number", async () => {
@@ -97,7 +97,7 @@ describe("getMotInfo", () => {
         const registration = "XYZ789";
 
         await expect(getMotInfo(registration)).rejects.toThrow(
-            'Internal server error: Error fetching MOT data: {"message":"Internal Server Error"}'
+            "Internal server error: Error fetching MOT data: {\"message\":\"Internal Server Error\"}"
         );
     });
     test("should handle MOT API fetch errors", async () => {
@@ -115,7 +115,28 @@ describe("getMotInfo", () => {
 
         const registration = "*******";
         await expect(getMotInfo(registration)).rejects.toThrow(
-            'Internal server error: Error fetching MOT data: {"message":"Vehicle not found"}'
+            "Internal server error: Error fetching MOT data: {\"message\":\"Vehicle not found\"}"
         );
+    });
+
+    test("should handle token refresh failure", async () => {
+        // Mock the token response to fail (first call)
+        fetch.mockResponseOnce(
+            JSON.stringify({
+                error: "invalid_client",
+                error_description: "Client authentication failed",
+            }),
+            { status: 400 } // Simulating token refresh failure with a 400 status
+        );
+
+        const registration = "AV21LBE";
+
+        // Ensure that the function throws an error when token refresh fails
+        await expect(getMotInfo(registration)).rejects.toThrow(
+            "Internal server error: Error fetching MOT data: {\"error\":\"invalid_client\",\"error_description\":\"Client authentication failed\"}"
+        );
+
+        // Verify that fetch was called once (only for token)
+        expect(fetch).toHaveBeenCalledTimes(1);
     });
 });

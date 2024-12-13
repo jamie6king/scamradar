@@ -68,4 +68,4 @@ async function getMotInfo(registration) {
 //     console.log(response);
 // })();
 
-module.exports = { getMotInfo };
+module.exports = getMotInfo;
