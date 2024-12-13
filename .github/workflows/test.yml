@@ -48,4 +48,8 @@ jobs:
                   MONGODB_URL: "mongodb://localhost:27017/scamradar_test"
                   DVLA_API_KEY: ${{ secrets.DVLA_API_KEY }}
                   DVLA_URL: ${{ vars.DVLA_URL }}
+                  DVSA_API_KEY: ${{ secrets.DVSA_API_KEY }}
+                  DVSA_CLIENT_ID: ${{ secrets.DVSA_CLIENT_ID }}
+                  DVSA_CLIENT_SECRET: ${{ secrets.DVSA_CLIENT_SECRET }}
+                  DVSA_TOKEN_URL: ${{ secrets.DVSA_TOKEN_URL }}
               run: npm --prefix=api run test
