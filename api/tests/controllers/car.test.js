@@ -95,11 +95,21 @@ describe("POST / with valid registrationNumber in request JSON", () => {
                         make: "ford",
                         model: "Focus",
                         colour: "Red",
+                        fuelType: "Petrol",
+                        registrationDate: "2019",
+                        mileage: "35000",
                     },
                 });
 
             expect(response.body).toEqual({
-                message: { make: "Pass", model: "Pass", colour: "Pass" },
+                message: {
+                    make: "Pass",
+                    model: "Pass",
+                    colour: "Pass",
+                    fuelType: "Pass",
+                    registrationDate: "Pass",
+                    mileage: "Pass",
+                },
             });
         });
     });
@@ -127,6 +137,9 @@ describe("POST / with valid registrationNumber in request JSON", () => {
                         make: "BMW",
                         model: "X5",
                         colour: "Black",
+                        fuelType: "JetFuel",
+                        registrationDate: "2055",
+                        mileage: "200",
                     },
                 });
 
@@ -135,6 +148,9 @@ describe("POST / with valid registrationNumber in request JSON", () => {
                     make: "Fail: should be FORD",
                     model: "Fail: should be FOCUS",
                     colour: "Fail: should be RED",
+                    fuelType: "Fail: should be PETROL",
+                    registrationDate: "Fail: should be 2019",
+                    mileage: "Fail: should be 30000 miles",
                 },
             });
         });
@@ -165,6 +181,47 @@ describe("POST / with valid registrationNumber in request JSON", () => {
                     make: "No data provided. Make is FORD",
                     model: "No data provided. Model is FOCUS",
                     colour: "No data provided. Colour is RED",
+                    fuelType: "No data provided. fuel type is PETROL",
+                    registrationDate:
+                        "No data provided. registration date is 2019",
+                    mileage:
+                        "No data provided. last MOT mileage was 30000 miles",
+                },
+            });
+        });
+    });
+    describe("Car less than 3 years old, no DVLA/DVSA record of mileage", () => {
+        beforeEach(() => {
+            fetch.resetMocks();
+            fetch.mockResponseOnce(JSON.stringify(DVLAresponse200MockJSON), {
+                status: 200,
+            });
+            delete MOTresponse200MockJSON.motTests;
+            fetch.mockResponseOnce(JSON.stringify(MOTresponse200MockJSON), {
+                status: 200,
+            });
+            process.env.DVSA_TOKEN_URL = "https://mock-token-url.com";
+            process.env.DVSA_CLIENT_ID = "mockClientId";
+            process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
+            process.env.DVSA_API_KEY = "mockApiKey";
+        });
+        it("Returns no MOT history message for mileage", async () => {
+            const response = await request(app)
+                .post("/car")
+                .send({
+                    registrationNumber: "AA19AAA",
+                    vehicleData: { mileage: "200000" },
+                });
+
+            expect(response.body).toEqual({
+                message: {
+                    make: "No data provided. Make is FORD",
+                    model: "No data provided. Model is FOCUS",
+                    colour: "No data provided. Colour is RED",
+                    fuelType: "No data provided. fuel type is PETROL",
+                    registrationDate:
+                        "No data provided. registration date is 2019",
+                    mileage: "No MOT history, mileage cannot be confirmed",
                 },
             });
         });
