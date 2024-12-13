@@ -19,7 +19,7 @@ describe("GET /test", () => {
         expect(response.statusCode).toBe(200);
     });
 
-    test("Returns test message", async () => {
+    test("Returns test reportResults", async () => {
         const response = await request(app).get("/car/test");
 
         expect(response.body).toEqual({ message: "Car route test" });
@@ -35,13 +35,13 @@ describe("POST / with malformed registrationNumber in request JSON", () => {
         expect(response.statusCode).toBe(400);
     });
 
-    test("Returns error message", async () => {
+    test("Returns error reportResults", async () => {
         const response = await request(app)
             .post("/car")
             .send({ registrationber: "AA19AAA" });
 
         expect(response.body).toEqual({
-            message:
+            reportResults:
                 "Couldn't find registrationNumber, did you send this in the request body?",
         });
     });
@@ -56,13 +56,13 @@ describe("POST / with valid registrationNumber in request JSON", () => {
         expect(response.statusCode).toBe(200);
     });
 
-    test("Returns message", async () => {
+    test("Returns warning message if no vehicleData", async () => {
         const response = await request(app)
             .post("/car")
             .send({ registrationNumber: "AA19AAA" });
 
         expect(response.body).toEqual({
-            message: "No comparisons can be made",
+            reportResults: "No comparisons can be made",
         });
     });
 
@@ -86,7 +86,7 @@ describe("POST / with valid registrationNumber in request JSON", () => {
             process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
             process.env.DVSA_API_KEY = "mockApiKey";
         });
-        it("Returns pass message for each", async () => {
+        it("Returns pass reportResults for each", async () => {
             const response = await request(app)
                 .post("/car")
                 .send({
@@ -95,11 +95,21 @@ describe("POST / with valid registrationNumber in request JSON", () => {
                         make: "ford",
                         model: "Focus",
                         colour: "Red",
+                        fuelType: "Petrol",
+                        registrationDate: "2019",
+                        mileage: "35000",
                     },
                 });
 
             expect(response.body).toEqual({
-                message: { make: "Pass", model: "Pass", colour: "Pass" },
+                reportResults: {
+                    make: "Pass",
+                    model: "Pass",
+                    colour: "Pass",
+                    fuelType: "Pass",
+                    registrationDate: "Pass",
+                    mileage: "Pass",
+                },
             });
         });
     });
@@ -118,7 +128,7 @@ describe("POST / with valid registrationNumber in request JSON", () => {
             process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
             process.env.DVSA_API_KEY = "mockApiKey";
         });
-        it("Returns Fail message for each", async () => {
+        it("Returns Fail reportResults for each", async () => {
             const response = await request(app)
                 .post("/car")
                 .send({
@@ -127,14 +137,20 @@ describe("POST / with valid registrationNumber in request JSON", () => {
                         make: "BMW",
                         model: "X5",
                         colour: "Black",
+                        fuelType: "JetFuel",
+                        registrationDate: "2055",
+                        mileage: "200",
                     },
                 });
 
             expect(response.body).toEqual({
-                message: {
+                reportResults: {
                     make: "Fail: should be FORD",
                     model: "Fail: should be FOCUS",
                     colour: "Fail: should be RED",
+                    fuelType: "Fail: should be PETROL",
+                    registrationDate: "Fail: should be 2019",
+                    mileage: "Fail: should be 30000 miles",
                 },
             });
         });
@@ -154,17 +170,58 @@ describe("POST / with valid registrationNumber in request JSON", () => {
             process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
             process.env.DVSA_API_KEY = "mockApiKey";
         });
-        it("Returns Fail message for each", async () => {
+        it("Returns Fail reportResults for each", async () => {
             const response = await request(app).post("/car").send({
                 registrationNumber: "AA19AAA",
                 vehicleData: {},
             });
 
             expect(response.body).toEqual({
-                message: {
+                reportResults: {
                     make: "No data provided. Make is FORD",
                     model: "No data provided. Model is FOCUS",
                     colour: "No data provided. Colour is RED",
+                    fuelType: "No data provided. fuel type is PETROL",
+                    registrationDate:
+                        "No data provided. registration date is 2019",
+                    mileage:
+                        "No data provided. last MOT mileage was 30000 miles",
+                },
+            });
+        });
+    });
+    describe("Car less than 3 years old, no DVLA/DVSA record of mileage", () => {
+        beforeEach(() => {
+            fetch.resetMocks();
+            fetch.mockResponseOnce(JSON.stringify(DVLAresponse200MockJSON), {
+                status: 200,
+            });
+            delete MOTresponse200MockJSON.motTests;
+            fetch.mockResponseOnce(JSON.stringify(MOTresponse200MockJSON), {
+                status: 200,
+            });
+            process.env.DVSA_TOKEN_URL = "https://mock-token-url.com";
+            process.env.DVSA_CLIENT_ID = "mockClientId";
+            process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
+            process.env.DVSA_API_KEY = "mockApiKey";
+        });
+        it("Returns no MOT history reportResults for mileage", async () => {
+            const response = await request(app)
+                .post("/car")
+                .send({
+                    registrationNumber: "AA19AAA",
+                    vehicleData: { mileage: "200000" },
+                });
+
+            expect(response.body).toEqual({
+                reportResults: {
+                    make: "No data provided. Make is FORD",
+                    model: "No data provided. Model is FOCUS",
+                    colour: "No data provided. Colour is RED",
+                    fuelType: "No data provided. fuel type is PETROL",
+                    registrationDate:
+                        "No data provided. registration date is 2019",
+                    mileage: "No MOT history, mileage cannot be confirmed",
                 },
             });
         });
@@ -185,7 +242,7 @@ describe("POST / with non existant registrationNumber in request JSON", () => {
         process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
         process.env.DVSA_API_KEY = "mockApiKey";
     });
-    it("Returns 404 and not found message", async () => {
+    it("Returns 404 and not found reportResults", async () => {
         const response = await request(app)
             .post("/car")
             .send({
@@ -198,7 +255,7 @@ describe("POST / with non existant registrationNumber in request JSON", () => {
             });
         expect(response.statusCode).toBe(404);
         expect(response.body).toEqual({
-            message: "Record for vehicle not found",
+            reportResults: "Record for vehicle not found",
         });
     });
 });
