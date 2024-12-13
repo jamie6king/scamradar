@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable n/no-unsupported-features/node-builtins */
 const getMotInfo = require("../../services/dvsa");
 const jestFetchMock = require("jest-fetch-mock");
@@ -97,7 +98,7 @@ describe("getMotInfo", () => {
         const registration = "XYZ789";
 
         await expect(getMotInfo(registration)).rejects.toThrow(
-            "Internal server error: Error fetching MOT data: {\"message\":\"Internal Server Error\"}"
+            'Internal server error: Error fetching MOT data: {"message":"Internal Server Error"}'
         );
     });
     test("should handle MOT API fetch errors", async () => {
@@ -115,28 +116,25 @@ describe("getMotInfo", () => {
 
         const registration = "*******";
         await expect(getMotInfo(registration)).rejects.toThrow(
-            "Internal server error: Error fetching MOT data: {\"message\":\"Vehicle not found\"}"
+            'Internal server error: Error fetching MOT data: {"message":"Vehicle not found"}'
         );
     });
 
     test("should handle token refresh failure", async () => {
-        // Mock the token response to fail (first call)
         fetch.mockResponseOnce(
             JSON.stringify({
                 error: "invalid_client",
                 error_description: "Client authentication failed",
             }),
-            { status: 400 } // Simulating token refresh failure with a 400 status
+            { status: 400 }
         );
 
         const registration = "AV21LBE";
 
-        // Ensure that the function throws an error when token refresh fails
         await expect(getMotInfo(registration)).rejects.toThrow(
-            "Internal server error: Error fetching MOT data: {\"error\":\"invalid_client\",\"error_description\":\"Client authentication failed\"}"
+            'Internal server error: Error fetching MOT data: {"error":"invalid_client","error_description":"Client authentication failed"}'
         );
 
-        // Verify that fetch was called once (only for token)
         expect(fetch).toHaveBeenCalledTimes(1);
     });
 });
