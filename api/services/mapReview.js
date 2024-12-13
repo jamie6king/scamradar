@@ -1,3 +1,6 @@
+/* eslint-disable n/no-unsupported-features/node-builtins */
+require("dotenv").config();
+
 const getMapReviewJSON = async (query) => {
     try {
         const params = new URLSearchParams({

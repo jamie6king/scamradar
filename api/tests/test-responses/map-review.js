@@ -753,15 +753,15 @@ const mockMapJSON = {
             summary: [
                 {
                     snippet:
-                        '"Excellent sales, test drive and collection service provided by staff."',
+                        "'Excellent sales, test drive and collection service provided by staff.'",
                 },
                 {
                     snippet:
-                        '"Great customer service and unmatched choice of cars at good prices"',
+                        "'Great customer service and unmatched choice of cars at good prices'",
                 },
                 {
                     snippet:
-                        '"Great place to good people to work with amazing customers variety of options."',
+                        "'Great place to good people to work with amazing customers variety of options.'",
                 },
             ],
             most_relevant: [

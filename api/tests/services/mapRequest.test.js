@@ -1,3 +1,4 @@
+/* eslint-disable n/no-unsupported-features/node-builtins */
 const jestFetchMock = require("jest-fetch-mock");
 const mockMapJSON = require("./../test-responses/map-review");
 const getMapReviewJSON = require("../../services/mapReview");
