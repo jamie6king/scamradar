@@ -21,7 +21,7 @@ const mockMapJSON = {
     },
     search_information: {
         local_results_state:
-            'Showing results for type: "place" instead of type: "search"',
+            "Showing results for type: 'place' instead of type: 'search'",
         query_displayed: "Cargiant NW10 6RS",
     },
     place_results: {
