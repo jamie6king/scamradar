@@ -1,3 +1,4 @@
+/* eslint-disable n/no-unsupported-features/node-builtins */
 require("dotenv").config();
 
 let cachedToken = null;
