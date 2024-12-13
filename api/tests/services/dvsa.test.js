@@ -89,7 +89,6 @@ describe("getMotInfo", () => {
     });
 
     test("should handle token fetch errors", async () => {
-        // Mock failed token response
         fetch.mockResponseOnce(
             JSON.stringify({ message: "Internal Server Error" }),
             { status: 500 }
@@ -97,9 +96,26 @@ describe("getMotInfo", () => {
 
         const registration = "XYZ789";
 
-        // Assert that an error is thrown when the token fetch fails
         await expect(getMotInfo(registration)).rejects.toThrow(
-            "Failed to refresh token"
+            'Internal server error: Error fetching MOT data: {"message":"Internal Server Error"}'
+        );
+    });
+    test("should handle MOT API fetch errors", async () => {
+        fetch.mockResponseOnce(
+            JSON.stringify({
+                access_token: "mockAccessToken",
+                expires_in: 3600,
+            })
+        );
+        fetch.mockReset();
+        fetch.mockResponseOnce(
+            JSON.stringify({ message: "Vehicle not found" }),
+            { status: 404 }
+        );
+
+        const registration = "*******";
+        await expect(getMotInfo(registration)).rejects.toThrow(
+            'Internal server error: Error fetching MOT data: {"message":"Vehicle not found"}'
         );
     });
 });
