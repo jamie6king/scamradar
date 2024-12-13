@@ -31,9 +31,25 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 });
 
 function sendVehicleData() {
+    let registrationDate;
+    try {
+        registrationDate = vehicleData["Date of 1st Registration"].substring(
+            0,
+            4
+        );
+    } catch {}
+
+    const formattedData = {
+        make: vehicleData["Manufacturer"] || undefined,
+        model: vehicleData["Model"] || undefined,
+        colour: vehicleData["Exterior Colour"] || undefined,
+        fuelType: vehicleData["Fuel Type"] || undefined,
+        registrationDate: registrationDate || undefined,
+    };
+
     SendEbayCarData({
         registrationNumber: registrationNumber,
-        vehicleData: vehicleData,
+        vehicleData: formattedData,
     })
         .then((response) => {
             console.log("Car data sent successfully", response);
