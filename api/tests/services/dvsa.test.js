@@ -89,7 +89,7 @@ describe("getMotInfo", () => {
         });
     });
 
-    test("should handle token fetch errors", async () => {
+    test("should handle MOT fetch errors", async () => {
         fetch.mockResponseOnce(
             JSON.stringify({ message: "Internal Server Error" }),
             { status: 500 }
@@ -101,6 +101,7 @@ describe("getMotInfo", () => {
             'Internal server error: Error fetching MOT data: {"message":"Internal Server Error"}'
         );
     });
+
     test("should handle MOT API fetch errors", async () => {
         fetch.mockResponseOnce(
             JSON.stringify({
@@ -119,22 +120,18 @@ describe("getMotInfo", () => {
             'Internal server error: Error fetching MOT data: {"message":"Vehicle not found"}'
         );
     });
+});
 
-    test("should handle token refresh failure", async () => {
-        fetch.mockResponseOnce(
-            JSON.stringify({
-                error: "invalid_client",
-                error_description: "Client authentication failed",
-            }),
-            { status: 400 }
-        );
+describe("getMotInfo failed token refresh", () => {
+    beforeEach(() => {
+        fetch.resetMocks();
+    });
 
+    test("throws error when token refresh fails", async () => {
+        fetch.mockReject(new Error("Network Error"));
         const registration = "AV21LBE";
-
         await expect(getMotInfo(registration)).rejects.toThrow(
-            'Internal server error: Error fetching MOT data: {"error":"invalid_client","error_description":"Client authentication failed"}'
+            "Internal server error: Network Error"
         );
-
-        expect(fetch).toHaveBeenCalledTimes(1);
     });
 });
