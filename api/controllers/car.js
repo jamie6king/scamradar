@@ -9,21 +9,21 @@ async function carReport(req, res) {
     const registrationNumber = req.body.registrationNumber;
     if (!registrationNumber) {
         return res.status(400).json({
-            message:
+            reportResults:
                 "Couldn't find registrationNumber, did you send this in the request body?",
         });
     }
     const vehicleData = req.body.vehicleData;
     if (!vehicleData) {
         return res.status(200).json({
-            message: "No comparisons can be made",
+            reportResults: "No comparisons can be made",
         });
     }
 
     const dvlaResponse = await getDvlaJson(registrationNumber);
     if (dvlaResponse.errors) {
         return res.status(404).json({
-            message: "Record for vehicle not found",
+            reportResults: "Record for vehicle not found",
         });
     }
     const dvsaResponse = await getMotInfo(registrationNumber);
@@ -121,7 +121,7 @@ async function carReport(req, res) {
     // const reportObject = Object.fromEntries(reportArray);
 
     return res.status(200).json({
-        message: resolvedCarReportJson,
+        reportResults: resolvedCarReportJson,
     });
 }
 
