@@ -44,7 +44,9 @@ function sendVehicleData() {
         model: vehicleData["Model"] || undefined,
         colour: vehicleData["Exterior Colour"] || undefined,
         fuelType: vehicleData["Fuel Type"] || undefined,
-        registrationDate: registrationDate || undefined,
+        registrationDate: vehicleData["Year"] || registrationDate || undefined,
+        mileage: vehicleData["Mileage"] || undefined,
+        transmission: vehicleData["Transmission"] || undefined,
     };
 
     SendEbayCarData({
