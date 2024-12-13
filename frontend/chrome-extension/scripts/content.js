@@ -90,15 +90,12 @@ if (container) {
   console.error('Container not found!');
 }
 
-const registrationNumber = "AA19AAA"
-
 const scrapedData = {
     title: advert_title,
     price: price,
     isAuction: isAuction,
     businessInfo: businessSellerInfo,
     sellerInfo: sellerInfo,
-    registrationNumber: registrationNumber,
     vehicleData: vehicleData
 }
 
