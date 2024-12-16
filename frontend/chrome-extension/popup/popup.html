@@ -12,14 +12,30 @@
                 padding: 10px;
                 border-radius: 5px;
             }
+
+            .hidden {
+                display: none;
+            }
         </style>
     </head>
     <body>
-        <form>
-            <label for="textInput">Enter Text:</label>
-            <input type="text" id="textInput" name="textInput" placeholder="Enter Registration" required>
-            <button type="submit" id="formSubmit">Submit</button>
-        </form>
+        <div id="input">
+            <form>
+                <label for="textInput">Enter Text:</label>
+                <input
+                    type="text"
+                    id="textInput"
+                    name="textInput"
+                    placeholder="Enter Registration"
+                    required
+                />
+                <button type="submit" id="formSubmit">Submit</button>
+            </form>
+        </div>
+        <div id="output" class="hidden">
+            <p id="make">Make</p>
+        </div>
         <script src="popup.js"></script>
+        <!-- <script src="results.js"></script> -->
     </body>
 </html>
