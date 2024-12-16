@@ -5,7 +5,6 @@ const businessRouter = require("./routes/business");
 const companiesHouseRouter = require("./routes/companiesHouse");
 const mapReviewRouter = require("./routes/mapReview");
 
-
 //const usersRouter = require("./routes/users");
 
 const app = express();
@@ -24,6 +23,7 @@ app.use("/business", businessRouter);
 app.use("/companiesHouse", companiesHouseRouter);
 app.use("/mapReview", mapReviewRouter);
 
+app.use("/mapReview", mapReviewRouter);
 
 // 404 Handler
 app.use((_req, res) => {

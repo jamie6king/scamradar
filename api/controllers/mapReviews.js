@@ -1,3 +1,5 @@
+const MapReview = require("../models/mapReviews");
+const listing = require("../models/listing");
 const getMapReviewJSON = require("../services/mapReview");
 
 const findMapReview = async (req, res) => {
