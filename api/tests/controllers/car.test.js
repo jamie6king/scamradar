@@ -9,6 +9,7 @@ const {
 const {
     MOTresponse200MockJSON,
     MOTresponse404MockJSON,
+    MOTresponse200MockJSONwithTestFailures,
 } = require("../test-responses/MOT-history-API");
 jestFetchMock.enableMocks();
 
@@ -109,6 +110,13 @@ describe("POST / with valid registrationNumber in request JSON", () => {
                     fuelType: "Pass",
                     registrationDate: "Pass",
                     mileage: "Pass",
+                    taxStatus: "Taxed",
+                    hasOutstandingRecall: "No",
+                    motData: {
+                        motRequired: true,
+                        motTestDueDate: "2024-03-30",
+                        motFailures: [],
+                    },
                 },
             });
         });
@@ -151,12 +159,19 @@ describe("POST / with valid registrationNumber in request JSON", () => {
                     fuelType: "Fail: should be PETROL",
                     registrationDate: "Fail: should be 2019",
                     mileage: "Fail: should be 30000 miles",
+                    taxStatus: "Taxed",
+                    hasOutstandingRecall: "No",
+                    motData: {
+                        motRequired: true,
+                        motTestDueDate: "2024-03-30",
+                        motFailures: [],
+                    },
                 },
             });
         });
     });
 
-    describe("No vehicleData from DVLA, DVSA records", () => {
+    describe("No vehicleData supplied", () => {
         beforeEach(() => {
             fetch.resetMocks();
             fetch.mockResponseOnce(JSON.stringify(DVLAresponse200MockJSON), {
@@ -186,6 +201,13 @@ describe("POST / with valid registrationNumber in request JSON", () => {
                         "No data provided. registration date is 2019",
                     mileage:
                         "No data provided. last MOT mileage was 30000 miles",
+                    taxStatus: "Taxed",
+                    hasOutstandingRecall: "No",
+                    motData: {
+                        motRequired: true,
+                        motTestDueDate: "2024-03-30",
+                        motFailures: [],
+                    },
                 },
             });
         });
@@ -197,6 +219,7 @@ describe("POST / with valid registrationNumber in request JSON", () => {
                 status: 200,
             });
             delete MOTresponse200MockJSON.motTests;
+            MOTresponse200MockJSON.motTestDueDate = "2024-04-30";
             fetch.mockResponseOnce(JSON.stringify(MOTresponse200MockJSON), {
                 status: 200,
             });
@@ -213,16 +236,122 @@ describe("POST / with valid registrationNumber in request JSON", () => {
                     vehicleData: { mileage: "200000" },
                 });
 
-            expect(response.body).toEqual({
-                reportResults: {
-                    make: "No data provided. Make is FORD",
-                    model: "No data provided. Model is FOCUS",
-                    colour: "No data provided. Colour is RED",
-                    fuelType: "No data provided. fuel type is PETROL",
-                    registrationDate:
-                        "No data provided. registration date is 2019",
-                    mileage: "No MOT history, mileage cannot be confirmed",
-                },
+            expect(response.body.reportResults.motData).toEqual({
+                motRequired: true,
+                motTestDueDate: "2024-04-30",
+                motFailures: [],
+            });
+        });
+    });
+    describe("Car more than 40 years old, MOT exempt", () => {
+        beforeEach(() => {
+            fetch.resetMocks();
+            fetch.mockResponseOnce(JSON.stringify(DVLAresponse200MockJSON), {
+                status: 200,
+            });
+            delete MOTresponse200MockJSON.motTests;
+            MOTresponse200MockJSON.motTestDueDate = null;
+            fetch.mockResponseOnce(JSON.stringify(MOTresponse200MockJSON), {
+                status: 200,
+            });
+            process.env.DVSA_TOKEN_URL = "https://mock-token-url.com";
+            process.env.DVSA_CLIENT_ID = "mockClientId";
+            process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
+            process.env.DVSA_API_KEY = "mockApiKey";
+        });
+        it("Returns false for MOT required", async () => {
+            const response = await request(app).post("/car").send({
+                registrationNumber: "AA19AAA",
+                vehicleData: {},
+            });
+
+            expect(response.body.reportResults.motData).toEqual({
+                motRequired: false,
+                motTestDueDate: null,
+                motFailures: [],
+            });
+        });
+    });
+    describe("MOT failure history", () => {
+        beforeEach(() => {
+            fetch.resetMocks();
+            fetch.mockResponseOnce(JSON.stringify(DVLAresponse200MockJSON), {
+                status: 200,
+            });
+            fetch.mockResponseOnce(
+                JSON.stringify(MOTresponse200MockJSONwithTestFailures),
+                {
+                    status: 200,
+                }
+            );
+            process.env.DVSA_TOKEN_URL = "https://mock-token-url.com";
+            process.env.DVSA_CLIENT_ID = "mockClientId";
+            process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
+            process.env.DVSA_API_KEY = "mockApiKey";
+        });
+        it("returns all failure occasions and non advisories", async () => {
+            const response = await request(app).post("/car").send({
+                registrationNumber: "AA19AAA",
+                vehicleData: {},
+            });
+
+            expect(response.body.reportResults.motData).toEqual({
+                motRequired: true,
+                motTestDueDate: "2024-11-28",
+                motFailures: [
+                    {
+                        completedDate: "2023-11-29T15:11:27.000Z",
+                        expiryDate: null,
+                        odometerValue: "186913",
+                        odometerUnit: "MI",
+                        odometerResultType: "READ",
+                        testResult: "FAILED",
+                        dataSource: "DVSA",
+                        defects: [
+                            {
+                                dangerous: false,
+                                text: "Nearside Rear Tyre has a cut in excess of the requirements deep enough to reach the ply or cords (5.2.3 (d) (i))",
+                                type: "PRS",
+                            },
+                        ],
+                    },
+                    {
+                        completedDate: "2022-11-17T15:45:08.000Z",
+                        expiryDate: null,
+                        odometerValue: "166642",
+                        odometerUnit: "MI",
+                        odometerResultType: "READ",
+                        testResult: "FAILED",
+                        dataSource: "DVSA",
+                        defects: [
+                            {
+                                dangerous: false,
+                                text: "Windscreen damaged but not adversely affecting driver's view (3.2 (a) (i))",
+                                type: "MINOR",
+                            },
+                            {
+                                dangerous: false,
+                                text: "Nearside Stop lamp(s) not working (4.3.1 (a) (ii))",
+                                type: "PRS",
+                            },
+                            {
+                                dangerous: false,
+                                text: "Offside Stop lamp(s) not working (4.3.1 (a) (ii))",
+                                type: "PRS",
+                            },
+                            {
+                                dangerous: false,
+                                text: "Front Registration plate does not conform to the specified requirements (0.1 (d))",
+                                type: "PRS",
+                            },
+                            {
+                                dangerous: false,
+                                text: "Rear Registration plate does not conform to the specified requirements (0.1 (d))",
+                                type: "PRS",
+                            },
+                        ],
+                    },
+                ],
             });
         });
     });
