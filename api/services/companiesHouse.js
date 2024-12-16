@@ -33,7 +33,7 @@ async function getCompanyHouseJson(companyNumber) {
 
 module.exports = getCompanyHouseJson;
 
-(async () => {
-    const response = await getCompanyHouseJson("09278648");
-    console.log(response);
-})();
+// (async () => {
+//     const response = await getCompanyHouseJson("09278648");
+//     console.log(response);
+// })();
