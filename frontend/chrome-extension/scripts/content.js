@@ -106,7 +106,7 @@ if (listingCategory == "Motors") {
 		vehicleData: vehicleData
 	}
 	
-	console.log(scrapedData)
+	// console.log(scrapedData)
 	chrome.runtime.sendMessage({ type: "scrapedData", scrapedData: scrapedData });
 } else {
 	chrome.runtime.sendMessage({ type: "wrongCategory", category: "" });

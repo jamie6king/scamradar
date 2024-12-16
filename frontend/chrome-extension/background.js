@@ -20,7 +20,7 @@ async function SendEbayCarData(body) {
 let registrationNumber = "";
 let vehicleData = "";
 
-chrome.action.setPopup({ popup: "popup/test.html" });
+// chrome.action.setPopup({ popup: "popup/test.html" });
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     if (message.type == "registrationNumber") {
@@ -49,7 +49,7 @@ function sendVehicleData() {
         model: vehicleData["Model"] || undefined,
         colour: vehicleData["Exterior Colour"] || undefined,
         fuelType: vehicleData["Fuel Type"] || undefined,
-        registrationDate: vehicleData["Year"] || registrationDate || undefined,
+        registrationDate: registrationDate || vehicleData["Year"] || undefined,
         mileage: vehicleData["Mileage"] || undefined,
         transmission: vehicleData["Transmission"] || undefined,
     };
