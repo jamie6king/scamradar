@@ -9,21 +9,21 @@ async function carReport(req, res) {
     const registrationNumber = req.body.registrationNumber;
     if (!registrationNumber) {
         return res.status(400).json({
-            message:
+            reportResults:
                 "Couldn't find registrationNumber, did you send this in the request body?",
         });
     }
     const vehicleData = req.body.vehicleData;
     if (!vehicleData) {
         return res.status(200).json({
-            message: "No comparisons can be made",
+            reportResults: "No comparisons can be made",
         });
     }
 
     const dvlaResponse = await getDvlaJson(registrationNumber);
     if (dvlaResponse.errors) {
         return res.status(404).json({
-            message: "Record for vehicle not found",
+            reportResults: "Record for vehicle not found",
         });
     }
     const dvsaResponse = await getMotInfo(registrationNumber);
@@ -62,6 +62,42 @@ async function carReport(req, res) {
                 return `Fail: should be ${dvlaResponse.colour}`;
             }
         },
+        fuelType: () => {
+            if (!vehicleData.fuelType) {
+                return `No data provided. fuel type is ${dvlaResponse.fuelType}`;
+            }
+            if (dvlaResponse.fuelType === vehicleData.fuelType.toUpperCase()) {
+                return "Pass";
+            } else {
+                return `Fail: should be ${dvlaResponse.fuelType}`;
+            }
+        },
+        registrationDate: () => {
+            if (!vehicleData.registrationDate) {
+                return `No data provided. registration date is ${dvsaResponse.registrationDate.slice(0, 4)}`;
+            }
+            if (
+                dvsaResponse.registrationDate.slice(0, 4) ===
+                vehicleData.registrationDate
+            ) {
+                return "Pass";
+            } else {
+                return `Fail: should be ${dvsaResponse.registrationDate.slice(0, 4)}`;
+            }
+        },
+        mileage: () => {
+            if (!dvsaResponse.motTests) {
+                return "No MOT history, mileage cannot be confirmed";
+            } else if (!vehicleData.mileage) {
+                return `No data provided. last MOT mileage was ${dvsaResponse.motTests[0].odometerValue} miles`;
+            } else if (
+                dvsaResponse.motTests[0].odometerValue <= vehicleData.mileage
+            ) {
+                return "Pass";
+            } else {
+                return `Fail: should be ${dvsaResponse.motTests[0].odometerValue} miles`;
+            }
+        },
     };
 
     const resolvedCarReportJson = Object.keys(carReportJson).reduce(
@@ -85,7 +121,7 @@ async function carReport(req, res) {
     // const reportObject = Object.fromEntries(reportArray);
 
     return res.status(200).json({
-        message: resolvedCarReportJson,
+        reportResults: resolvedCarReportJson,
     });
 }
 
