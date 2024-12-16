@@ -98,6 +98,43 @@ async function carReport(req, res) {
                 return `Fail: should be ${dvsaResponse.motTests[0].odometerValue} miles`;
             }
         },
+        taxStatus: () => {
+            return dvlaResponse.taxStatus;
+        },
+        hasOutstandingRecall: () => {
+            return dvsaResponse.hasOutstandingRecall;
+        },
+        motData: () => {
+            const motRequired = dvsaResponse.motTestDueDate !== null;
+            let motTestDueDate = null;
+            if (motRequired) {
+                if (!dvsaResponse.motTests) {
+                    motTestDueDate = dvsaResponse.motTestDueDate;
+                } else {
+                    motTestDueDate = dvsaResponse.motTests[0]["expiryDate"];
+                }
+            }
+            let motFailures = [];
+            if (dvsaResponse.motTests) {
+                motFailures = dvsaResponse.motTests
+                    .filter((motTest) => {
+                        return motTest.testResult === "FAILED";
+                    })
+                    .map((motTest) => {
+                        return {
+                            ...motTest,
+                            defects: motTest.defects.filter(
+                                (defect) => defect.type !== "ADVISORY"
+                            ),
+                        };
+                    });
+            }
+            return {
+                motRequired: motRequired,
+                motTestDueDate: motTestDueDate,
+                motFailures: motFailures,
+            };
+        },
     };
 
     const resolvedCarReportJson = Object.keys(carReportJson).reduce(
