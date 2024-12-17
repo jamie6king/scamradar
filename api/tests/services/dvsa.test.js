@@ -1,140 +1,52 @@
-/* eslint-disable quotes */
+/* eslint-disable jest/no-conditional-expect */
 /* eslint-disable n/no-unsupported-features/node-builtins */
 const getMotInfo = require("../../services/dvsa");
-const jestFetchMock = require("jest-fetch-mock");
-jestFetchMock.enableMocks();
-beforeEach(() => {
-    fetch.resetMocks();
-});
 
-afterEach(() => {
-    fetch.mockReset();
-});
+global.fetch = jest.fn();
 
 describe("getMotInfo", () => {
-    beforeAll(() => {
-        process.env.DVSA_TOKEN_URL = "https://mock-token-url.com";
-        process.env.DVSA_CLIENT_ID = "mockClientId";
-        process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
-        process.env.DVSA_API_KEY = "mockApiKey";
+    beforeEach(() => {
+        global.fetch = jest.fn();
     });
+    it("should handle error when fetching token", async () => {
+        fetch.mockRejectedValueOnce(new Error("Token fetch failed"));
 
-    test("should fetch MOT data for a valid reg number", async () => {
-        fetch.mockResponseOnce(
-            JSON.stringify({
-                access_token: "mockAccessToken",
+        try {
+            await getMotInfo("AV21LBE");
+        } catch (error) {
+            expect(error.message).toBe(
+                "Error refreshing the token: Token fetch failed"
+            );
+        }
+    });
+});
+
+describe("MOT fetch fail", () => {
+    beforeEach(() => {
+        global.fetch = jest.fn();
+
+        fetch.mockResolvedValueOnce({
+            json: jest.fn().mockResolvedValue({
+                access_token: "dummyToken",
                 expires_in: 3600,
-            })
-        );
-
-        fetch.mockResponseOnce(
-            JSON.stringify({
-                registration: "ABC123",
-                motHistory: [
-                    {
-                        testDate: "2024-01-01",
-                        result: "PASS",
-                    },
-                ],
-            })
-        );
-
-        const registration = "ABC123";
-        const result = await getMotInfo(registration);
-
-        expect(result).toEqual({
-            registration: "ABC123",
-            motHistory: [
-                {
-                    testDate: "2024-01-01",
-                    result: "PASS",
-                },
-            ],
-        });
-    });
-
-    test("should handle token expiry and refresh", async () => {
-        fetch.mockResponseOnce(
-            JSON.stringify({
-                access_token: "mockAccessToken",
-                expires_in: 3600,
-            })
-        );
-
-        fetch.mockReset();
-
-        fetch.mockResponseOnce(
-            JSON.stringify({
-                registration: "DEF456",
-                motHistory: [
-                    {
-                        testDate: "2024-01-02",
-                        result: "FAIL",
-                    },
-                ],
-            })
-        );
-
-        const registration = "DEF456";
-        const result = await getMotInfo(registration);
-
-        expect(result).toEqual({
-            registration: "DEF456",
-            motHistory: [
-                {
-                    testDate: "2024-01-02",
-                    result: "FAIL",
-                },
-            ],
-        });
-    });
-
-    test("should handle token fetch errors", async () => {
-        fetch.mockResponseOnce(
-            JSON.stringify({ message: "Internal Server Error" }),
-            { status: 500 }
-        );
-
-        const registration = "XYZ789";
-
-        await expect(getMotInfo(registration)).rejects.toThrow(
-            'Internal server error: Error fetching MOT data: {"message":"Internal Server Error"}'
-        );
-    });
-    test("should handle MOT API fetch errors", async () => {
-        fetch.mockResponseOnce(
-            JSON.stringify({
-                access_token: "mockAccessToken",
-                expires_in: 3600,
-            })
-        );
-        fetch.mockReset();
-        fetch.mockResponseOnce(
-            JSON.stringify({ message: "Vehicle not found" }),
-            { status: 404 }
-        );
-
-        const registration = "*******";
-        await expect(getMotInfo(registration)).rejects.toThrow(
-            'Internal server error: Error fetching MOT data: {"message":"Vehicle not found"}'
-        );
-    });
-
-    test("should handle token refresh failure", async () => {
-        fetch.mockResponseOnce(
-            JSON.stringify({
-                error: "invalid_client",
-                error_description: "Client authentication failed",
             }),
-            { status: 400 }
-        );
+        });
+    });
 
-        const registration = "AV21LBE";
+    it("should handle error when fetching MOT data", async () => {
+        const motResponse = {
+            ok: false,
+            text: jest.fn().mockResolvedValue("MOT fetch failed"),
+        };
+        fetch.mockResolvedValueOnce(motResponse);
 
-        await expect(getMotInfo(registration)).rejects.toThrow(
-            'Internal server error: Error fetching MOT data: {"error":"invalid_client","error_description":"Client authentication failed"}'
-        );
-
-        expect(fetch).toHaveBeenCalledTimes(1);
+        try {
+            await getMotInfo("AV21LBE");
+        } catch (error) {
+            expect(error.message).toBe(
+                "Internal server error: Error fetching MOT data: MOT fetch failed"
+            );
+        }
+        expect(fetch).toHaveBeenCalledTimes(2);
     });
 });

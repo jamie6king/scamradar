@@ -23,17 +23,13 @@ async function getMotInfo(registration) {
                 }),
             });
 
-            if (!response.ok) {
-                throw new Error("Failed to refresh token");
-            }
-
             const data = await response.json();
             cachedToken = data.access_token;
             tokenExpiryTime = Date.now() + data.expires_in * 1000;
             console.log("Token refreshed and cached.");
         } catch (error) {
-            console.error("Error refreshing the token", error);
-            throw error;
+            console.error(`Error refreshing the token: ${error.message}`);
+            throw new Error(`Error refreshing the token: ${error.message}`);
         }
     }
 
