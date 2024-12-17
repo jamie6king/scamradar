@@ -1,26 +1,40 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Scraped Data</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                padding: 10px;
-            }
-            pre {
-                background-color: #f4f4f4;
-                padding: 10px;
-                border-radius: 5px;
-            }
-        </style>
+        <title>ScamRadar</title>
+        <link rel="stylesheet" href="popup.css">
     </head>
     <body>
-        <form>
-            <label for="textInput">Enter Text:</label>
-            <input type="text" id="textInput" name="textInput" placeholder="Enter Registration" required>
-            <button type="submit" id="formSubmit">Submit</button>
-            <button id="expandReviews">Show review data</button>
-        </form>
+        <div id="header">
+            <h2>ScamRadar</h2>
+        </div>
+        <div id="input">
+            <form>
+                <label for="textInput">Enter Text:</label>
+                <input
+                    type="text"
+                    id="textInput"
+                    name="textInput"
+                    placeholder="Enter Registration"
+                    required
+                />
+                <button type="submit" id="formSubmit">Submit</button>
+            </form>
+        </div>
+        <div id="output" class="hidden">
+            <p id="make"></p>
+            <p id="model"></p>
+            <p id="colour"></p>
+            <p id="fuel-type"></p>
+            <p id="registration-date"></p>
+            <p id="mileage"></p>
+            <p id="tax-status"></p>
+            <p id="outstanding-recall"></p>
+            <p id="mot-required"></p>
+            <p id="mot-due"></p>
+          <button id="expandReviews">Show review data</button>
+        </div>
         <script src="popup.js"></script>
+        <!-- <script src="results.js"></script> -->
     </body>
 </html>
