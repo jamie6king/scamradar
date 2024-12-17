@@ -116,6 +116,7 @@ async function carReport(req, res) {
             }
             let motFailures = [];
             if (dvsaResponse.motTests) {
+                // console.log(dvsaResponse.motTests);
                 motFailures = dvsaResponse.motTests
                     .filter((motTest) => {
                         return motTest.testResult === "FAILED";

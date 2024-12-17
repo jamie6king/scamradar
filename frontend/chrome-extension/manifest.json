@@ -18,7 +18,7 @@
     "content_scripts": [
         {
             "matches": ["https://www.ebay.co.uk/*", "http://localhost:3000/"],
-            "js": ["scripts/content.js", "popup/popup.js", "popup/results.js"]
+            "js": ["scripts/content.js"]
         }
     ],
     "commands": {
