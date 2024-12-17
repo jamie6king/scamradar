@@ -53,6 +53,7 @@ describe("MapReviews model", () => {
             ],
         }).save();
         const mapReviews = await MapReview.find({});
+        expect(mapReviews[0]._id).toEqual(mapReview._id);
     });
     it("adds mapreview to DB when the review is large", async () => {
         const mapReview = await new MapReview({

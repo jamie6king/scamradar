@@ -1,6 +1,5 @@
 const getMapReviewJSON = require("../services/mapReview");
 const MapReview = require("../models/mapReviews");
-const mongoose = require("mongoose");
 
 const findMapReview = async (req, res) => {
     try {
