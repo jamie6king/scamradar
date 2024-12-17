@@ -1,24 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Scraped Data</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                padding: 10px;
-            }
-            pre {
-                background-color: #f4f4f4;
-                padding: 10px;
-                border-radius: 5px;
-            }
-
-            .hidden {
-                display: none;
-            }
-        </style>
+        <title>ScamRadar</title>
+        <link rel="stylesheet" href="popup.css">
     </head>
     <body>
+        <div id="header">
+            <h2>ScamRadar</h2>
+        </div>
         <div id="input">
             <form>
                 <label for="textInput">Enter Text:</label>
@@ -33,7 +22,16 @@
             </form>
         </div>
         <div id="output" class="hidden">
-            <p id="make">Make</p>
+            <p id="make"></p>
+            <p id="model"></p>
+            <p id="colour"></p>
+            <p id="fuel-type"></p>
+            <p id="registration-date"></p>
+            <p id="mileage"></p>
+            <p id="tax-status"></p>
+            <p id="outstanding-recall"></p>
+            <p id="mot-required"></p>
+            <p id="mot-due"></p>
         </div>
         <script src="popup.js"></script>
         <!-- <script src="results.js"></script> -->
