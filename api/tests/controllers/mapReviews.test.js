@@ -64,7 +64,6 @@ describe("/mapReviews", () => {
             );
             expect(responseOne.statusCode).toBe(201);
             expect(responseTwo.statusCode).toBe(200);
-            // expect(responseTwo.body.mapReviews).toEqual(mockMapFilteredJSON);
         });
     });
 });

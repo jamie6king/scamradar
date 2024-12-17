@@ -63,7 +63,7 @@ describe("MapReviews model", () => {
             averageRating: mockMapFilteredJSON.averageRating,
             reviewsCount: mockMapFilteredJSON.reviewsCount,
             ratingSummary: mockMapFilteredJSON.ratingSummary,
-            mostRelevantReviews: mockMapFilteredJSON.mostRelevantReviews
+            mostRelevantReviews: mockMapFilteredJSON.mostRelevantReviews,
         }).save();
         const mapReviews = await MapReview.find({});
         console.log(mapReviews);
