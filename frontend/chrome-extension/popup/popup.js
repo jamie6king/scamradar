@@ -35,3 +35,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         // document.getElementById("mot-data").innerText = "MOT Failures:\n" + response.motFailures.map((failure) => failure);
     }
 });
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log(message)
+    if(message.type === "mapQueryResults") {
+        const mapReviews = message.mapReview.mapReviews
+        document.getElementById("businessName").innerText = "Business Name:\n" + mapReviews.businessName;
+        sendResponse( {status: "review success"})
+    };
+});
