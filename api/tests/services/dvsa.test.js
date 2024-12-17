@@ -1,6 +1,8 @@
 /* eslint-disable quotes */
 /* eslint-disable n/no-unsupported-features/node-builtins */
+const mockRequire = require("mock-require");
 const getMotInfo = require("../../services/dvsa");
+const modulePath = require("../../services/dvsa");
 const jestFetchMock = require("jest-fetch-mock");
 jestFetchMock.enableMocks();
 beforeEach(() => {
@@ -132,6 +134,30 @@ describe("getMotInfo failed token refresh", () => {
         const registration = "AV21LBE";
         await expect(getMotInfo(registration)).rejects.toThrow(
             "Internal server error: Network Error"
+        );
+    });
+});
+
+describe("DVSA token refresh", () => {
+    test("should handle token fetch errors", async () => {
+        // Mock the fetch function to simulate a failure during the token fetch
+        const errorMessage = "Simulated token refresh failure";
+        global.fetch = jest.fn().mockRejectedValueOnce(new Error(errorMessage));
+
+        // Mock the internal state variables (cachedToken and tokenExpiryTime)
+        mockRequire(modulePath, {
+            cachedToken: null, // Simulate no token
+            tokenExpiryTime: null, // Simulate token expiration
+        });
+
+        // Import the mocked module
+        const getMotInfo = mockRequire(modulePath);
+
+        const registration = "XYZ789";
+
+        // Test that the error is thrown correctly with the expected error message
+        await expect(getMotInfo(registration)).rejects.toThrow(
+            `Error refreshing the token, ${errorMessage}`
         );
     });
 });

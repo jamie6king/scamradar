@@ -29,7 +29,7 @@ async function getMotInfo(registration) {
             console.log("Token refreshed and cached.");
         } catch (error) {
             console.error(`Error refreshing the token: ${error.message}`);
-            throw error;
+            throw new Error(`Error refreshing the token: ${error.message}`);
         }
     }
 
