@@ -34,7 +34,7 @@ const businessSellerElement = document.querySelector('.vim.d-business-seller');
 if (businessSellerElement) {
     // const sellerName = businessSellerElement.querySelector('.ux-section__item span')?.textContent.trim();
     const addressItems = businessSellerElement.querySelectorAll('.ux-section__item span');
-    const address = Array.from(addressItems).slice(0, 6).map(item => item.textContent.trim()).join(', ');
+    const address = Array.from(addressItems).slice(0, 10).map(item => item.textContent.trim()).join(', ');
     const selfCertification = businessSellerElement.querySelector('.ux-section--selfCertification .ux-section__item span')?.textContent.trim();
 
     businessSellerInfo = {
@@ -98,6 +98,23 @@ const scrapedData = {
     sellerInfo: sellerInfo,
     vehicleData: vehicleData
 }
+console.log(scrapedData)
+
+const companyAddressData = scrapedData.businessInfo.address.split(", ");
+const companyName = companyAddressData[0];
+let companyPostcode;
+const regex = /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})/
+for (element of companyAddressData) {
+  if (regex.test(element)) {
+    companyPostcode = element;
+    break;
+  }
+}
+const mapQueryData = {
+  companyName: companyName,
+  companyPostcode: companyPostcode
+}
+chrome.runtime.sendMessage( {type: "mapQueryData", mapQueryData: mapQueryData });
 
 chrome.runtime.sendMessage({ type: "scrapedData", scrapedData: scrapedData });
 

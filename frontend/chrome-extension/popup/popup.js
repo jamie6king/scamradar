@@ -8,3 +8,14 @@ function submitted (event){
 	const registrationNumber = event.target.textInput.value;
 	chrome.runtime.sendMessage({ type: "registrationNumber", registrationNumber: registrationNumber });
 }
+
+const showReviews = () => {
+	const button = document.getElementById("expandReviews")
+	button.addEventListener('click', () => {
+		chrome.runtime.sendMessage({ type: "showReviews" }, (response) => {
+			console.log("hello")
+		})
+	})
+}
+
+document.addEventListener('DOMContentLoaded', showReviews);

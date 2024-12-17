@@ -30,6 +30,31 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     }
 });
 
+const getMapReviews = async (message) => {
+    const companyName = message.mapQueryData.companyName;
+    const companyPostcode = message.mapQueryData.companyPostcode;
+    try {
+        const response = await fetch(
+            `http://localhost:3000/mapReview/${companyName}/${companyPostcode}`
+        );
+        const mapReviewData = await response.json();
+        return mapReviewData;
+    } catch (error) {
+        console.error("Unable to retreive reviews: ", error);
+        return { error };
+    }
+};
+
+chrome.runtime.onMessage.addListener((message, sender, response) => {
+    if (message.type == "mapQueryData") { (async () => {
+        // const data = await getMapReviews(message);
+        console.log(data)
+        // sendResponse(data);
+    })();
+    return true; 
+    }
+});
+
 function sendVehicleData() {
     let registrationDate;
     try {
