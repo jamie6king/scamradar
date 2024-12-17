@@ -7,10 +7,15 @@ const findMapReview = async (req, res) => {
 
         const mapReviewsRaw = await getMapReviewJSON(query);
 
-        if (!mapReviewsRaw || !mapReviewsRaw.place_results) {
-            return res
-                .status(404)
-                .json({ message: "No map reviews found for given query" });
+        if (
+            !mapReviewsRaw ||
+            !mapReviewsRaw.place_results ||
+            !mapReviewsRaw.place_results.rating
+        ) {
+            return res.status(404).json({
+                message:
+                    "The company name and postcode did not find any valid reviews, exercise caution",
+            });
         }
 
         const mapReviews = {
