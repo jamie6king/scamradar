@@ -46,16 +46,25 @@ const getMapReviews = async (message) => {
         return mapReviewData;
     } catch (error) {
         console.error("Unable to retreive reviews: ", error);
-        return { error };
+        return { error: error.message };
     }
 };
 
 chrome.runtime.onMessage.addListener((message, sender, response) => {
-    if (message.type == "mapQueryData") { (async () => {
-        // const data = await getMapReviews(message);
-        console.log(data)
-        // sendResponse(data);
-    })();
+    if (message.type == "mapQueryData") { 
+        (async () => {
+            try {
+                const data = await getMapReviews(message);
+                console.log(data)
+                chrome.runtime.sendMessage({
+                    type: "mapQueryResults",
+                    mapReview: data,
+                })
+            } catch (error) {
+                console.error("Error while fetching map reviews:", error);
+                sendResponse({ error: error.message });
+            }
+        })();
     return true; 
     }
 });
