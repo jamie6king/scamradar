@@ -1,35 +1,49 @@
 const getMapReviewJSON = require("../services/mapReview");
+const MapReview = require("../models/mapReviews");
+const mongoose = require("mongoose");
 
 const findMapReview = async (req, res) => {
     try {
         const { companyName, postcode } = req.params;
         const query = `${companyName} ${postcode}`;
 
-        const mapReviewsRaw = await getMapReviewJSON(query);
-
-        if (
-            !mapReviewsRaw ||
-            !mapReviewsRaw.place_results ||
-            !mapReviewsRaw.place_results.rating
-        ) {
-            return res.status(404).json({
-                message:
-                    "The company name and postcode did not find any valid reviews, exercise caution",
-            });
+        const mapReview = await MapReview.findOne({ query: query });
+        if (!mapReview) {
+            const mapReviewsRaw = await getMapReviewJSON(query);
+            if (
+                !mapReviewsRaw ||
+                !mapReviewsRaw.place_results ||
+                !mapReviewsRaw.place_results.rating
+            ) {
+                return res.status(404).json({
+                    message:
+                        "The company name and postcode did not find any valid reviews, exercise caution",
+                });
+            }
+            const mapReviews = {
+                query: query,
+                businessName: mapReviewsRaw.place_results.title,
+                businessAddress: mapReviewsRaw.place_results.address,
+                averageRating: mapReviewsRaw.place_results.rating,
+                reviewsCount: mapReviewsRaw.place_results.reviews,
+                ratingSummary: mapReviewsRaw.place_results.rating_summary,
+                mostRelevantReviews:
+                    mapReviewsRaw.place_results.user_reviews.most_relevant,
+            };
+            await saveMapReviewtoDB(mapReviews);
+            res.status(201).json({ mapReviews: mapReviews });
+        } else if (mapReview) {
+            const mapReviews = {
+                query: query,
+                businessName: mapReview.title,
+                businessAddress: mapReview.address,
+                averageRating: mapReview.rating,
+                reviewsCount: mapReview.reviews,
+                ratingSummary: mapReview.rating_summary,
+                mostRelevantReviews: mapReview.most_relevant,
+            };
+            res.status(200).json({ mapReviews: mapReviews });
         }
-
-        const mapReviews = {
-            query: query,
-            businessName: mapReviewsRaw.place_results.title,
-            businessAddress: mapReviewsRaw.place_results.address,
-            averageRating: mapReviewsRaw.place_results.rating,
-            reviewsCount: mapReviewsRaw.place_results.reviews,
-            ratingSummary: mapReviewsRaw.place_results.rating_summary,
-            mostRelevantReviews:
-                mapReviewsRaw.place_results.user_reviews.most_relevant,
-        };
-
-        res.status(200).json({ mapReviews: mapReviews });
     } catch (error) {
         console.log(`\n${error.message}\n`);
         res.status(500).json({
@@ -37,6 +51,18 @@ const findMapReview = async (req, res) => {
             error: error.message,
         });
     }
+};
+
+const saveMapReviewtoDB = async (jsonData) => {
+    return await new MapReview({
+        query: jsonData.query,
+        businessName: jsonData.businessName,
+        businessAddress: jsonData.businessAddress,
+        averageRating: jsonData.averageRating,
+        reviewsCount: jsonData.reviewsCount,
+        ratingSummary: jsonData.ratingSummary,
+        mostRelevantReviews: jsonData.mostRelevantReviews,
+    }).save();
 };
 
 const mapReviewController = {
