@@ -110,11 +110,14 @@ async function carReport(req, res) {
             if (motRequired) {
                 if (!dvsaResponse.motTests) {
                     motTestDueDate = dvsaResponse.motTestDueDate;
-                } else {
+                } else if (dvsaResponse.motTests[0].testResult === "PASSED") {
                     motTestDueDate = dvsaResponse.motTests[0]["expiryDate"];
+                } else {
+                    motTestDueDate = "Latest MOT failed";
                 }
             }
             let motFailures = [];
+            let mileageHistory = [];
             if (dvsaResponse.motTests) {
                 // console.log(dvsaResponse.motTests);
                 motFailures = dvsaResponse.motTests

@@ -355,6 +355,35 @@ describe("POST / with valid registrationNumber in request JSON", () => {
             });
         });
     });
+    describe("Latest MOT failed, motTestDueDate returns 'Latest MOT failed'", () => {
+        beforeEach(() => {
+            fetch.resetMocks();
+            fetch.mockResponseOnce(JSON.stringify(DVLAresponse200MockJSON), {
+                status: 200,
+            });
+            MOTresponse200MockJSONwithTestFailures.motTests.shift();
+            fetch.mockResponseOnce(
+                JSON.stringify(MOTresponse200MockJSONwithTestFailures),
+                {
+                    status: 200,
+                }
+            );
+            process.env.DVSA_TOKEN_URL = "https://mock-token-url.com";
+            process.env.DVSA_CLIENT_ID = "mockClientId";
+            process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
+            process.env.DVSA_API_KEY = "mockApiKey";
+        });
+        it("returns all failure occasions and non advisories", async () => {
+            const response = await request(app).post("/car").send({
+                registrationNumber: "AA19AAA",
+                vehicleData: {},
+            });
+
+            expect(response.body.reportResults.motData.motTestDueDate).toEqual(
+                "Latest MOT failed"
+            );
+        });
+    });
 });
 
 describe("POST / with non existant registrationNumber in request JSON", () => {
