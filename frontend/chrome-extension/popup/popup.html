@@ -8,7 +8,7 @@
         <div id="header">
             <h2>ScamRadar</h2>
         </div>
-        <button id="expandReviews">Start sniffing!</button>
+        <!-- <button id="expandReviews">Start sniffing!</button> -->
         <div id="input">
             <form>
                 <label for="textInput">Enter Text:</label>
@@ -77,14 +77,31 @@
                     </div>
                 </div>
 
-                <p id="ratingSummary"></p>
-                <p id="mostRelevantReviews"></p>
+                <div class="reviews-container">
+                    <button class="reviews-accordion">review 1</button>
+                    <div class="panel">
+                        <p id="username-1"></p>
+                        <p id="first-review"></p>
+                    </div>
+                    <button class="reviews-accordion">review 2</button>
+                    <div class="panel">
+                        <p id="username-2"></p>
+                        <p id="second-review"></p>
+                    </div>
+                    <button class="reviews-accordion">review 3</button>
+                    <div class="panel">
+                        <p id="username-3"></p>
+                        <p id="third-review"></p>
+                    </div>
+                </div>
+
                 <p id="noReviewsFound"></p>
             </div>
         </div>
 
         <script src="popup.js"></script>
         <script src="accordion.js"></script>
+        <script src="reviews-accordion.js"></script>
         <!-- <script src="results.js"></script> -->
     </body>
 </html>
