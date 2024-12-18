@@ -15,7 +15,7 @@ describe("/mapReviews", () => {
         jestFetchMock.resetMocks();
     });
     describe("GET retrieve a map review using company name and postcode", () => {
-        it("returns a status of 200", async () => {
+        it("returns a status of 201", async () => {
             const mockData = mockMapJSON;
             jestFetchMock.mockResponseOnce(JSON.stringify(mockData));
 
