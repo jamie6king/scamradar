@@ -30,7 +30,7 @@ const findMapReview = async (req, res) => {
         };
         await saveMapReviewtoDB(mapReviews);
         res.status(201).json({ mapReviews: mapReviews });
-    } else if (mapReview) {
+    } else {
         const mapReviews = {
             query: query,
             businessName: mapReview.businessName,

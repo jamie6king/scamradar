@@ -9,7 +9,7 @@ const {
 
 jestFetchMock.enableMocks();
 
-describe("/", () => {
+describe("companies house", () => {
     beforeEach(() => {
         fetch.resetMocks();
     });
@@ -31,6 +31,20 @@ describe("/", () => {
         expect(response.body).toEqual({
             reportResults: "Couldn't find companyNumber?",
         });
+    });
+
+    it("returns 404 if company doesn't exist", async () => {
+        fetch.mockResponseOnce(JSON.stringify(CompaniesHouse404MockJSON), {
+            status: 404,
+        });
+        const companyNumber = "99999999";
+        const response = await request(app)
+            .post("/companiesHouse")
+            .send({ companyNumber: companyNumber });
+        expect(response.status).toBe(404);
+        expect(response.body.reportResults).toEqual(
+            "Record for company not found"
+        );
     });
 
     it("returns 404 if route is wrong", async () => {
