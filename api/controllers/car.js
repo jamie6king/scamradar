@@ -6,7 +6,7 @@ function test(req, res) {
 }
 
 async function carReport(req, res) {
-    const registrationNumber = req.body.registrationNumber;
+    let registrationNumber = req.body.registrationNumber;
     if (!registrationNumber) {
         return res.status(400).json({
             reportResults:
@@ -19,6 +19,7 @@ async function carReport(req, res) {
             reportResults: "No comparisons can be made",
         });
     }
+    registrationNumber = registrationNumber.replace(/\s+/g, "").toUpperCase();
     let dvlaResponse = await findDvlaJson(registrationNumber);
     if (!dvlaResponse) {
         dvlaResponse = await getDvlaJson(registrationNumber);
