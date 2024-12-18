@@ -1,6 +1,5 @@
 const { getDvlaJson, findDvlaJson, saveDvlaJson } = require("../services/car");
 const { getMotInfo, findDvsaJson, saveDvsaJson } = require("../services/dvsa");
-const DvlaResponse = require("../models/dvla");
 
 function test(req, res) {
     res.status(200).json({ message: "Car route test" });
@@ -126,7 +125,6 @@ async function carReport(req, res) {
                 }
             }
             let motFailures = [];
-            let mileageHistory = [];
             if (dvsaResponse.motTests) {
                 // console.log(dvsaResponse.motTests);
                 motFailures = dvsaResponse.motTests
