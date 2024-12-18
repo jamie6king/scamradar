@@ -1,9 +1,17 @@
 # Documentation
 
+## Planning
+
+-   We created a [user story](docs/Structure%20Wireframe.png) and an [overall structure diagram](docs/Overview%20Structure.png) in order to work out what our extension is actually going to do.
+-   We created a [wireframe extension mockup](docs/Extension%20Wireframe.png) in order to try and work out what was on the extension.
+-   We created a [database structure wireframe](docs/Database%20Structure.png) and a [list of APIs](docs/API%20Overview.png) in order to work out the logic in the backend and what we might need.
+
 ## APIs
 
 -   [DVLA Car API](docs/DVLA%20Car%20API.md)
 -   [DVSA MOT History API](docs/DVSA%20MOT%20History%20API.md)
+-   [Google Cloud API](docs/Google%20Cloud%20API.md)
+-   [SerpAPI API](docs/SerpAPI%20API.md)
 
 ## Environmental Variables
 
