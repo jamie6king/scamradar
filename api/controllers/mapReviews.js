@@ -41,7 +41,6 @@ const findMapReview = async (req, res) => {
                 ratingSummary: mapReview.ratingSummary,
                 mostRelevantReviews: mapReview.mostRelevantReviews,
             };
-            console.log(mapReviews);
             res.status(200).json({ mapReviews: mapReviews });
         }
     } catch (error) {
