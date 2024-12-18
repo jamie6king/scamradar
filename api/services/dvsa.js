@@ -1,5 +1,6 @@
 /* eslint-disable n/no-unsupported-features/node-builtins */
 require("dotenv").config();
+const DvsaResponse = require("../models/dvsa");
 
 let cachedToken = null;
 let tokenExpiryTime = null;
@@ -63,9 +64,32 @@ async function getMotInfo(registration) {
     }
 }
 
+async function findDvsaJson(registrationNumber) {
+    const dvsaResponse = await DvsaResponse.findOne({
+        numberPlate: registrationNumber,
+    });
+    if (dvsaResponse) {
+        return dvsaResponse.dvsaResponse;
+    } else {
+        return dvsaResponse;
+    }
+}
+
+async function saveDvsaJson(dvsaResponse, numberPlate) {
+    const dvsaEntry = new DvsaResponse({
+        numberPlate: numberPlate,
+        dvsaResponse: dvsaResponse,
+    });
+    await dvsaEntry.save();
+}
+
 // (async () => {
 //     const response = await getMotInfo("av21lbe");
 //     console.log(response);
 // })();
 
-module.exports = getMotInfo;
+module.exports = {
+    getMotInfo: getMotInfo,
+    findDvsaJson: findDvsaJson,
+    saveDvsaJson: saveDvsaJson,
+};

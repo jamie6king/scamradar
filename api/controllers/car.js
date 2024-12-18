@@ -1,5 +1,6 @@
-const getDvlaJson = require("../services/car");
-const getMotInfo = require("../services/dvsa");
+const { getDvlaJson, findDvlaJson, saveDvlaJson } = require("../services/car");
+const { getMotInfo, findDvsaJson, saveDvsaJson } = require("../services/dvsa");
+const DvlaResponse = require("../models/dvla");
 
 function test(req, res) {
     res.status(200).json({ message: "Car route test" });
@@ -19,15 +20,22 @@ async function carReport(req, res) {
             reportResults: "No comparisons can be made",
         });
     }
-
-    const dvlaResponse = await getDvlaJson(registrationNumber);
-    if (dvlaResponse.errors) {
-        return res.status(404).json({
-            reportResults: "Record for vehicle not found",
-        });
+    let dvlaResponse = await findDvlaJson(registrationNumber);
+    if (!dvlaResponse) {
+        dvlaResponse = await getDvlaJson(registrationNumber);
+        if (dvlaResponse.errors) {
+            return res.status(404).json({
+                reportResults: "Record for vehicle not found",
+            });
+        } else {
+            await saveDvlaJson(dvlaResponse, registrationNumber);
+        }
     }
-    const dvsaResponse = await getMotInfo(registrationNumber);
-
+    let dvsaResponse = await findDvsaJson(registrationNumber);
+    if (!dvsaResponse) {
+        dvsaResponse = await getMotInfo(registrationNumber);
+        await saveDvsaJson(dvsaResponse, registrationNumber);
+    }
     const carReportJson = {
         make: () => {
             if (!vehicleData.make) {
@@ -91,7 +99,8 @@ async function carReport(req, res) {
             } else if (!vehicleData.mileage) {
                 return `No data provided. last MOT mileage was ${dvsaResponse.motTests[0].odometerValue} miles`;
             } else if (
-                dvsaResponse.motTests[0].odometerValue <= vehicleData.mileage
+                Number(dvsaResponse.motTests[0].odometerValue) <=
+                Number(vehicleData.mileage)
             ) {
                 return "Pass";
             } else {
