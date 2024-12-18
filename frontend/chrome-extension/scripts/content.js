@@ -49,7 +49,22 @@ if (listingCategory == "Motors") {
 	} else {
 		console.log('Business seller information not found.');
 	}
-	
+
+	let motorData = null;
+
+	// const motorsDetailsElement = document.querySelector('#desc_ifr').contentDocument.querySelector('.motors-details');
+	// const motorsDetailsElement = document.querySelector(document.querySelector("body > div > div > div.motors-details-wrapper > div.motors-details > div.motors-seller-address"));
+
+	// console.log(motorsDetailsElement)
+
+	const iframe = document.querySelector('iframe#desc_ifr');
+	if (iframe) {
+		const iframeSrc = iframe.src;
+		chrome.runtime.sendMessage({ iframeSrc });
+	} else {
+		console.log("Iframe not found.");
+	}
+
 	// Find sellers Ebay name, seller type, feedback score and number
 	let sellerInfo = null;
 	const sellerCard = document.querySelector('.x-sellercard-atf__info');

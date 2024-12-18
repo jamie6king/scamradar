@@ -19,6 +19,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         const response = message.carReport.reportResults;
 
+        let [year, month, day] = response.motData.motTestDueDate.split("-");
+        let newMotDate = `${day}-${month}-${year}`;
+
         document.getElementById("input").classList.add("hidden");
         document.getElementById("output").classList.remove("hidden");
 
@@ -31,7 +34,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         document.getElementById("tax-status").innerText = "Tax Status:\n" + response.taxStatus;
         document.getElementById("outstanding-recall").innerText = "Outstanding Recalls:\n" + response.hasOutstandingRecall;
 				// document.getElementById("mot-required").innerText = "MOT Required:\n" + (response.motRequired ? "Yes" : "No");
-        document.getElementById("mot-due").innerText = "MOT Due Date:\n" + response.motTestDueDate;
+        document.getElementById("mot-due").innerText = "MOT Due Date:\n" + newMotDate;
         // document.getElementById("mot-data").innerText = "MOT Failures:\n" + response.motFailures.map((failure) => failure);
     }
 });
@@ -40,6 +43,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message)
     if(message.type === "mapQueryResults") {
         const mapReviews = message.mapReview.mapReviews
+
+        // document.getElementById("mapReview").classList.remove("hidden");
         document.getElementById("businessName").innerText = "Business Name:\n" + mapReviews.businessName;
         sendResponse( {status: "review success"})
     };
