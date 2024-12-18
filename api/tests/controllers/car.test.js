@@ -516,4 +516,86 @@ describe("Consecutive calls: POST / with valid registrationNumber in request JSO
         expect(dvsaDbResponse.numberPlate).toEqual("AA19AAA");
         expect(dvsaDbResponse.dvsaResponse).toEqual(MOTresponse200MockJSON);
     });
+    it("User input deviates from standard format, aa19 aa changed to AA19AAA. APIs called and response saved to db on first call", async () => {
+        await DvlaResponse.deleteMany({});
+        await DvsaResponse.deleteMany({});
+        fetch.resetMocks();
+        fetch.mockResponseOnce(JSON.stringify(DVLAresponse200MockJSON), {
+            status: 200,
+        });
+        fetch.mockResponseOnce(JSON.stringify(MOTresponse200MockJSON), {
+            status: 200,
+        });
+        process.env.DVSA_TOKEN_URL = "https://mock-token-url.com";
+        process.env.DVSA_CLIENT_ID = "mockClientId";
+        process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
+        process.env.DVSA_API_KEY = "mockApiKey";
+        await request(app).post("/car").send({
+            registrationNumber: "aa19 aaa",
+            vehicleData: {},
+        });
+        const dvlaDbResponse = await DvlaResponse.findOne({
+            numberPlate: "AA19AAA",
+        });
+        const dvsaDbResponse = await DvsaResponse.findOne({
+            numberPlate: "AA19AAA",
+        });
+        expect(fetch).toHaveBeenCalledTimes(2);
+        expect(fetch).toHaveBeenNthCalledWith(1, process.env.DVLA_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": process.env.DVLA_API_KEY,
+            },
+            body: JSON.stringify({ registrationNumber: "AA19AAA" }),
+        });
+        expect(fetch).toHaveBeenNthCalledWith(
+            2,
+            "https://history.mot.api.gov.uk/v1/trade/vehicles/registration/AA19AAA",
+            {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer mockAccessToken",
+                    "Content-Type": "application/json",
+                    "X-API-Key": "mockApiKey",
+                },
+            }
+        );
+        expect(dvlaDbResponse).not.toBeNull();
+        expect(dvlaDbResponse.numberPlate).toEqual("AA19AAA");
+        expect(dvlaDbResponse.dvlaResponse).toEqual(DVLAresponse200MockJSON);
+        expect(dvsaDbResponse).not.toBeNull();
+        expect(dvsaDbResponse.numberPlate).toEqual("AA19AAA");
+        expect(dvsaDbResponse.dvsaResponse).toEqual(MOTresponse200MockJSON);
+    });
+    it("User input deviates from standard format, aa19 aa changed to AA19AAA. APIs NOT called on second call", async () => {
+        fetch.resetMocks();
+        fetch.mockResponseOnce(JSON.stringify(DVLAresponse200MockJSON), {
+            status: 200,
+        });
+        fetch.mockResponseOnce(JSON.stringify(MOTresponse200MockJSON), {
+            status: 200,
+        });
+        process.env.DVSA_TOKEN_URL = "https://mock-token-url.com";
+        process.env.DVSA_CLIENT_ID = "mockClientId";
+        process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
+        process.env.DVSA_API_KEY = "mockApiKey";
+        await request(app).post("/car").send({
+            registrationNumber: "aa19 aaa",
+            vehicleData: {},
+        });
+        const dvlaDbResponse = await DvlaResponse.findOne({
+            numberPlate: "AA19AAA",
+        });
+        const dvsaDbResponse = await DvsaResponse.findOne({
+            numberPlate: "AA19AAA",
+        });
+        expect(fetch).toHaveBeenCalledTimes(0);
+        expect(dvlaDbResponse).not.toBeNull();
+        expect(dvlaDbResponse.numberPlate).toEqual("AA19AAA");
+        expect(dvlaDbResponse.dvlaResponse).toEqual(DVLAresponse200MockJSON);
+        expect(dvsaDbResponse).not.toBeNull();
+        expect(dvsaDbResponse.numberPlate).toEqual("AA19AAA");
+        expect(dvsaDbResponse.dvsaResponse).toEqual(MOTresponse200MockJSON);
+    });
 });
