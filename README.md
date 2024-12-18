@@ -6,7 +6,7 @@ ScamRadar is a Chrome extension that sniffs Ebay car listing pages and cross ref
 
 1. Clone the project.
 2. `cd` into the `api` folder.
-3. Create a `.env` file with the needed variables as instructed in [this document](docs/Environmental%20Variables.md).
+3. Create a `.env` file with the needed variables as instructed in [this document](DOCUMENTATION.md).
 4. Install the server's dependancies with `npm install --omit=dev`
     - Leave out the `--omit=dev` if you want to develop ScamRadar.
 5. Open Chrome.
