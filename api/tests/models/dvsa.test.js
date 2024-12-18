@@ -1,15 +1,29 @@
-const DvsaToken = require("../../models/dvsa");
+const {
+    MOTresponse200MockJSON,
+    MOTresponse404MockJSON,
+} = require("../test-responses/MOT-history-API");
 
-describe("DvsaToken Model", () => {
-    it("correctly saves a new accesstoken with expires_in and lastupdated", () => {
-        const dvsaToken = new DvsaToken({
-            _id: "123456789",
-            access_token: "asdfghjkl123456789",
-            expires_in: 3599,
-            last_update: "2024-12-11T16:59:10.064+00:00",
+const DvsaResponse = require("../../models/dvsa");
+require("../mongodb_helper");
+
+describe("dvsaResponse model", () => {
+    beforeEach(async () => {
+        await DvsaResponse.deleteMany({});
+    });
+    it("should create a DVLAResponse instance", () => {
+        const record = new DvsaResponse({
+            numberPlate: "AA19AAA",
+            dvsaResponse: MOTresponse200MockJSON,
         });
-        expect(dvsaToken.access_token).toEqual("asdfghjkl123456789");
-        expect(dvsaToken.expires_in).toEqual(3599);
-        expect(dvsaToken.last_update).toEqual(new Date(dvsaToken.last_update));
+        expect(record.numberPlate).toEqual("AA19AAA");
+        expect(record.dvsaResponse).toEqual(MOTresponse200MockJSON);
+    });
+    it("should create a DVLAResponse instance for 404 reponse", () => {
+        const record = new DvsaResponse({
+            numberPlate: "SN1FRZ",
+            dvsaResponse: MOTresponse404MockJSON,
+        });
+        expect(record.numberPlate).toEqual("SN1FRZ");
+        expect(record.dvsaResponse).toEqual(MOTresponse404MockJSON);
     });
 });

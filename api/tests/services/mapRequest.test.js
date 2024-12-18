@@ -34,4 +34,14 @@ describe("mapReviewService", () => {
         const response = await getMapReviewJSON(query);
         expect(response).toEqual(mockMapJSON);
     });
+    it("Correctly handles errors from SerpAPI", async () => {
+        const logSpy = jest.spyOn(console, "log");
+
+        fetch.mockReject(new Error("Test error"));
+
+        const query = "Cargiant";
+        await getMapReviewJSON(query);
+
+        expect(logSpy).toHaveBeenCalledWith("\nTest error\n");
+    });
 });

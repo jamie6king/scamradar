@@ -8,6 +8,7 @@
         <div id="header">
             <h2>ScamRadar</h2>
         </div>
+        <button id="expandReviews">Start sniffing!</button>
         <div id="input">
             <form>
                 <label for="textInput">Enter Text:</label>
@@ -48,9 +49,16 @@
             <button class="accordion" id="expandReviews">
                 Show review data
             </button>
-            <div class="panel">
-                <p>rewview dataaaaaa</p>
+            <div id="mapReview" class="panel">
+            <p id="businessName"></p>
+            <p id="businessAddress"></p>
+            <p id="reviewsCount"></p>
+            <p id="averageRating"></p>
+            <p id="ratingSummary"></p>
+            <p id="mostRelevantReviews"></p>
+            <p id="noReviewsFound"></p>
             </div>
+            
         </div>
 
         <script src="popup.js"></script>

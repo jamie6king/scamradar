@@ -44,3 +44,25 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         // document.getElementById("mot-data").innerText = "MOT Failures:\n" + response.motFailures.map((failure) => failure);
     }
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    chrome.storage.local.get(["mapQueryResults", "mapQueryError"], (result) => {
+        if(result.mapQueryResults) {
+            console.log("Received results", result.mapQueryResults)
+            const mapReviews = result.mapQueryResults.mapReviews
+            if(mapReviews) {
+                document.getElementById("businessName").innerText = "Business Name:\n" + mapReviews.businessName;
+                document.getElementById("businessAddress").innerText = "Business Address:\n" + mapReviews.businessAddress;
+                document.getElementById("reviewsCount").innerText = "Number of reviews:\n" + mapReviews.reviewsCount;
+                document.getElementById("averageRating").innerText = "Avg. rating:\n" + mapReviews.averageRating;
+                document.getElementById("ratingSummary").innerText = "Rating summary:\n" + mapReviews.ratingSummary;
+                document.getElementById("mostRelevantReviews").innerText = "User reviews sample:\n" + mapReviews.mostRevantReviews;
+                // chrome.storage.local.remove(['mapQueryResults']);
+            } else {
+                document.getElementById("noReviewsFound").innerText = result.mapQueryResults.message;
+            }
+        }
+    })
+})
+
