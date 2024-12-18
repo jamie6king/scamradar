@@ -1,3 +1,8 @@
+const {
+    DVLAresponse200MockJSON,
+    DVLAresponse404MockJSON,
+} = require("../test-responses/DVLA-VES-API");
+
 const DvlaResponse = require("../../models/dvla");
 require("../mongodb_helper");
 
@@ -7,32 +12,18 @@ describe("dvlaResponse model", () => {
     });
     it("should create a DVLAResponse instance", () => {
         const record = new DvlaResponse({
-            productId: "TEST123",
-            response: {
-                registrationNumber: "AB12CDE",
-                taxStatus: "TAXED",
-                taxDueDate: "2025-06-09",
-                motStatus: "Valid",
-                make: "AUDI",
-                yearOfManufacture: 2014,
-                engineCapacity: 1969,
-                co2Emissions: 109,
-                fuelType: "DIESEL",
-                markedForExport: false,
-                colour: "GREEN",
-                typeApproval: "M1",
-                revenueWeight: 1870,
-                dateOfLastV5CIssued: "2024-06-27",
-                motExpiryDate: "2025-07-08",
-                wheelplan: "2 AXLE RIGID BODY",
-                monthOfFirstRegistration: "2013-12",
-            },
+            numberPlate: "AA19AAA",
+            dvlaResponse: DVLAresponse200MockJSON,
         });
-        expect(record.productId).toEqual("TEST123");
-        expect(record.response.registrationNumber).toEqual("AB12CDE");
-        expect(record.response.make).toEqual("AUDI");
-        expect(record.response.fuelType).toEqual("DIESEL");
-        expect(record.response.make).toEqual("AUDI");
-        expect(record.response.monthOfFirstRegistration).toEqual("2013-12");
+        expect(record.numberPlate).toEqual("AA19AAA");
+        expect(record.dvlaResponse).toEqual(DVLAresponse200MockJSON);
+    });
+    it("should create a DVLAResponse instance for 404 reponse", () => {
+        const record = new DvlaResponse({
+            numberPlate: "SN1FRZ",
+            dvlaResponse: DVLAresponse404MockJSON,
+        });
+        expect(record.numberPlate).toEqual("SN1FRZ");
+        expect(record.dvlaResponse).toEqual(DVLAresponse404MockJSON);
     });
 });

@@ -12,6 +12,9 @@ const {
     MOTresponse200MockJSONwithTestFailures,
 } = require("../test-responses/MOT-history-API");
 jestFetchMock.enableMocks();
+const DvlaResponse = require("../../models/dvla");
+const DvsaResponse = require("../../models/dvsa");
+require("../mongodb_helper");
 
 describe("GET /test", () => {
     test("the response code is 200", async () => {
@@ -28,6 +31,10 @@ describe("GET /test", () => {
 });
 
 describe("POST / with malformed registrationNumber in request JSON", () => {
+    afterEach(async () => {
+        await DvlaResponse.deleteMany({});
+        await DvsaResponse.deleteMany({});
+    });
     test("the response code is 400", async () => {
         const response = await request(app)
             .post("/car")
@@ -49,6 +56,10 @@ describe("POST / with malformed registrationNumber in request JSON", () => {
 });
 
 describe("POST / with valid registrationNumber in request JSON", () => {
+    afterEach(async () => {
+        await DvlaResponse.deleteMany({});
+        await DvsaResponse.deleteMany({});
+    });
     test("the response code is 200", async () => {
         const response = await request(app)
             .post("/car")
@@ -355,6 +366,35 @@ describe("POST / with valid registrationNumber in request JSON", () => {
             });
         });
     });
+    describe("Latest MOT failed, motTestDueDate returns 'Latest MOT failed'", () => {
+        beforeEach(() => {
+            fetch.resetMocks();
+            fetch.mockResponseOnce(JSON.stringify(DVLAresponse200MockJSON), {
+                status: 200,
+            });
+            MOTresponse200MockJSONwithTestFailures.motTests.shift();
+            fetch.mockResponseOnce(
+                JSON.stringify(MOTresponse200MockJSONwithTestFailures),
+                {
+                    status: 200,
+                }
+            );
+            process.env.DVSA_TOKEN_URL = "https://mock-token-url.com";
+            process.env.DVSA_CLIENT_ID = "mockClientId";
+            process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
+            process.env.DVSA_API_KEY = "mockApiKey";
+        });
+        it("returns all failure occasions and non advisories", async () => {
+            const response = await request(app).post("/car").send({
+                registrationNumber: "AA19AAA",
+                vehicleData: {},
+            });
+
+            expect(response.body.reportResults.motData.motTestDueDate).toEqual(
+                "Latest MOT failed"
+            );
+        });
+    });
 });
 
 describe("POST / with non existant registrationNumber in request JSON", () => {
@@ -371,6 +411,10 @@ describe("POST / with non existant registrationNumber in request JSON", () => {
         process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
         process.env.DVSA_API_KEY = "mockApiKey";
     });
+    afterEach(async () => {
+        await DvlaResponse.deleteMany({});
+        await DvsaResponse.deleteMany({});
+    });
     it("Returns 404 and not found reportResults", async () => {
         const response = await request(app)
             .post("/car")
@@ -386,5 +430,90 @@ describe("POST / with non existant registrationNumber in request JSON", () => {
         expect(response.body).toEqual({
             reportResults: "Record for vehicle not found",
         });
+    });
+});
+
+describe("Consecutive calls: POST / with valid registrationNumber in request JSON", () => {
+    it("DVLA/DVSA response saved to db on first call", async () => {
+        await DvlaResponse.deleteMany({});
+        await DvsaResponse.deleteMany({});
+        fetch.resetMocks();
+        fetch.mockResponseOnce(JSON.stringify(DVLAresponse200MockJSON), {
+            status: 200,
+        });
+        fetch.mockResponseOnce(JSON.stringify(MOTresponse200MockJSON), {
+            status: 200,
+        });
+        process.env.DVSA_TOKEN_URL = "https://mock-token-url.com";
+        process.env.DVSA_CLIENT_ID = "mockClientId";
+        process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
+        process.env.DVSA_API_KEY = "mockApiKey";
+        await request(app).post("/car").send({
+            registrationNumber: "AA19AAA",
+            vehicleData: {},
+        });
+        const dvlaDbResponse = await DvlaResponse.findOne({
+            numberPlate: "AA19AAA",
+        });
+        const dvsaDbResponse = await DvsaResponse.findOne({
+            numberPlate: "AA19AAA",
+        });
+        expect(fetch).toHaveBeenCalledTimes(2);
+        expect(fetch).toHaveBeenNthCalledWith(1, process.env.DVLA_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": process.env.DVLA_API_KEY,
+            },
+            body: JSON.stringify({ registrationNumber: "AA19AAA" }),
+        });
+        expect(fetch).toHaveBeenNthCalledWith(
+            2,
+            "https://history.mot.api.gov.uk/v1/trade/vehicles/registration/AA19AAA",
+            {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer mockAccessToken",
+                    "Content-Type": "application/json",
+                    "X-API-Key": "mockApiKey",
+                },
+            }
+        );
+        expect(dvlaDbResponse).not.toBeNull();
+        expect(dvlaDbResponse.numberPlate).toEqual("AA19AAA");
+        expect(dvlaDbResponse.dvlaResponse).toEqual(DVLAresponse200MockJSON);
+        expect(dvsaDbResponse).not.toBeNull();
+        expect(dvsaDbResponse.numberPlate).toEqual("AA19AAA");
+        expect(dvsaDbResponse.dvsaResponse).toEqual(MOTresponse200MockJSON);
+    });
+    it("API's not fetched on second call", async () => {
+        fetch.resetMocks();
+        fetch.mockResponseOnce(JSON.stringify(DVLAresponse200MockJSON), {
+            status: 200,
+        });
+        fetch.mockResponseOnce(JSON.stringify(MOTresponse200MockJSON), {
+            status: 200,
+        });
+        process.env.DVSA_TOKEN_URL = "https://mock-token-url.com";
+        process.env.DVSA_CLIENT_ID = "mockClientId";
+        process.env.DVSA_CLIENT_SECRET = "mockClientSecret";
+        process.env.DVSA_API_KEY = "mockApiKey";
+        await request(app).post("/car").send({
+            registrationNumber: "AA19AAA",
+            vehicleData: {},
+        });
+        const dvlaDbResponse = await DvlaResponse.findOne({
+            numberPlate: "AA19AAA",
+        });
+        const dvsaDbResponse = await DvsaResponse.findOne({
+            numberPlate: "AA19AAA",
+        });
+        expect(fetch).toHaveBeenCalledTimes(0);
+        expect(dvlaDbResponse).not.toBeNull();
+        expect(dvlaDbResponse.numberPlate).toEqual("AA19AAA");
+        expect(dvlaDbResponse.dvlaResponse).toEqual(DVLAresponse200MockJSON);
+        expect(dvsaDbResponse).not.toBeNull();
+        expect(dvsaDbResponse.numberPlate).toEqual("AA19AAA");
+        expect(dvsaDbResponse.dvsaResponse).toEqual(MOTresponse200MockJSON);
     });
 });

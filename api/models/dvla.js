@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const DvlaResponseSchema = new mongoose.Schema({
-    productId: { type: String, required: true, unique: true },
-    response: { type: Object, required: true },
+    numberPlate: { type: String, required: true, unique: true },
+    dvlaResponse: { type: Object, required: true },
 });
 
 const DvlaResponse = mongoose.model("DvlaResponse", DvlaResponseSchema);
