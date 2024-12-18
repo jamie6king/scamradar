@@ -50,15 +50,37 @@
                 Show review data
             </button>
             <div id="mapReview" class="panel">
-            <p id="businessName"></p>
-            <p id="businessAddress"></p>
-            <p id="reviewsCount"></p>
-            <p id="averageRating"></p>
-            <p id="ratingSummary"></p>
-            <p id="mostRelevantReviews"></p>
-            <p id="noReviewsFound"></p>
+                <p id="businessName"></p>
+                <p id="businessAddress"></p>
+
+                <div class="ratings-container">
+                    <div class="progress-container">
+                        <div class="ratings">
+                            <div id="five-stars" class="stars"></div>
+                        </div>
+                        <div class="ratings">
+                            <div id="four-stars" class="stars"></div>
+                        </div>
+                        <div class="ratings">
+                            <div id="three-stars" class="stars"></div>
+                        </div>
+                        <div class="ratings">
+                            <div id="two-stars" class="stars"></div>
+                        </div>
+                        <div class="ratings">
+                            <div id="one-stars" class="stars"></div>
+                        </div>
+                    </div>
+                    <div class="average-rating">
+                        <p style="font-size: x-large" id="averageRating"></p>
+                        <p id="reviewsCount"></p>
+                    </div>
+                </div>
+
+                <p id="ratingSummary"></p>
+                <p id="mostRelevantReviews"></p>
+                <p id="noReviewsFound"></p>
             </div>
-            
         </div>
 
         <script src="popup.js"></script>

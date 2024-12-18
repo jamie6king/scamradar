@@ -83,8 +83,8 @@ button:hover {
 }
 
 .loading {
-    border: 8px solid #f3f3f3; /* Light grey */
-    border-top: 8px solid #ac78af; /* Blue */
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #ac78af;
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -99,4 +99,31 @@ button:hover {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.ratings-container {
+    display: flex;
+    flex-direction: row;
+    width: 300px;
+}
+
+.progress-container {
+    width: 70%;
+}
+
+.average-rating {
+    width: 30%;
+    text-align: center;
+}
+.ratings {
+    height: auto;
+    background-color: rgb(210, 208, 208);
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.stars {
+    background-color: rgb(198, 105, 121);
+    height: 10px;
+    border-radius: 10px;
 }
