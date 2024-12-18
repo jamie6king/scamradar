@@ -14,7 +14,7 @@ You need to create a `.env` file in the `api` folder, and populate with the foll
 
 ### DVLA
 
-Setup the DVSA API as defined [the documentation](docs/DVSA%20MOT%20History%20API.md), and append these lines to the `.env` file _(replacing the parts in the angled brackets with the instructions)_:
+Setup the DVSA API as defined in steps 1-2 in [the documentation](docs/DVSA%20MOT%20History%20API.md), and append these lines to the `.env` file _(replacing the parts in the angled brackets with the instructions)_:
 
 -   `DVLA_URL="<your DVLA API key provided to you>"`
 -   `DVLA_URL="https://driver-vehicle-licensing.api.gov.uk/vehicle-enquiry/v1/vehicles"`

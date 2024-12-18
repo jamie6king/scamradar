@@ -40,4 +40,5 @@
 }
 ```
 
-15. The body of the response are all the images that look similar.
+15. Click send.
+16. The body of the response are all the images that look similar.
