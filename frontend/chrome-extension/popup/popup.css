@@ -1,59 +1,102 @@
 /* popup.css */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  padding: 10px;
-  width: 400px;
-  height: auto;
-  overflow: hidden;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 10px;
+    width: 400px;
+    height: auto;
+    overflow: hidden;
 }
 
 pre {
-  background-color: #ffffff;
-  border-radius: 5px;
-  padding: 10px;
-  border: 1px solid #ccc;
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid #ccc;
 }
 
 form {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 label {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 input {
-  padding: 5px;
-  margin-right: 10px;
+    padding: 5px;
+    margin-right: 10px;
 }
 
 button {
-  padding: 5px 10px;
-  background-color: #0078D4;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
+    padding: 5px 10px;
+    background-color: #0078d4;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 button:hover {
-  background-color: #005A9E;
+    background-color: #005a9e;
 }
 
 .hidden {
-  display: none;
+    display: none;
 }
 
 #header {
-  text-align: center;
+    text-align: center;
 }
 
 #input {
-  text-align: center;
+    text-align: center;
 }
 
 #output {
-  height: 200px;
-  overflow: auto;
+    height: 200px;
+    overflow: auto;
+}
+
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+
+.active,
+.accordion:hover {
+    background-color: #ccc;
+}
+
+.panel {
+    padding: 0 18px;
+    background-color: white;
+    display: none;
+    overflow: hidden;
+}
+
+.loading {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #ac78af; /* Blue */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 0.5s linear infinite;
+    justify-self: center;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
