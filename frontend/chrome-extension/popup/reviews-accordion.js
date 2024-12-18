@@ -1,10 +1,9 @@
-let acc = document.getElementsByClassName("accordion");
-let i;
+let acc1 = document.getElementsByClassName("reviews-accordion");
+let j;
+console.log("test click!!");
 
-// console.log("test click!!");
-
-for (i = 0; i < acc.length; i++) {
-    acc[i].addEventListener("click", function () {
+for (j = 0; j < acc.length; j++) {
+    acc1[j].addEventListener("click", function () {
         this.classList.toggle("active");
         let panel = this.nextElementSibling;
         if (panel.style.display === "block") {

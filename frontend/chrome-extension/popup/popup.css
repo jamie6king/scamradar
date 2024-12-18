@@ -3,9 +3,11 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     padding: 10px;
-    width: 400px;
-    height: auto;
-    overflow: hidden;
+    width: 500px;
+    height: 500px;
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
 }
 
 pre {
@@ -54,8 +56,19 @@ button:hover {
 }
 
 #output {
-    height: 200px;
+    height: 100%;
     overflow: auto;
+}
+
+.reviews-accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
 }
 
 .accordion {
@@ -75,6 +88,11 @@ button:hover {
     background-color: #ccc;
 }
 
+.active,
+.reviews-accordion:hover {
+    background-color: #ccc;
+}
+
 .panel {
     padding: 0 18px;
     background-color: white;
@@ -89,7 +107,8 @@ button:hover {
     width: 40px;
     height: 40px;
     animation: spin 0.5s linear infinite;
-    justify-self: center;
+
+    margin: auto;
 }
 
 @keyframes spin {
@@ -104,7 +123,7 @@ button:hover {
 .ratings-container {
     display: flex;
     flex-direction: row;
-    width: 300px;
+    width: 400px;
 }
 
 .progress-container {

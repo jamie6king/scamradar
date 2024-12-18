@@ -22,12 +22,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         let [year, month, day] = response.motData.motTestDueDate.split("-");
         let newMotDate = `${day}-${month}-${year}`;
 
-        document.getElementById("loading").classList.add("hidden");
-        document.getElementById("input").classList.add("hidden");
-        document.getElementById("output").classList.remove("hidden");
+        setTimeout(() => {
+            document.getElementById("input").classList.add("hidden");
+            document.getElementById("loading").classList.add("hidden");
+            document.getElementById("output").classList.remove("hidden");
+        }, 1500);
 
-        document.getElementById("make").innerText = 
-            "Make:\n" + response.make;
+        document.getElementById("make").innerText = "Make:\n" + response.make;
         document.getElementById("model").innerText =
             "Model:\n" + response.model;
         document.getElementById("colour").innerText =
@@ -76,6 +77,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         mapReviews.reviewsCount) *
                     100,
             };
+            const relevantReviews = {
+                first: mapReviews.mostRelevantReviews[0].description,
+                user1: mapReviews.mostRelevantReviews[0].username,
+                second: mapReviews.mostRelevantReviews[1].description,
+                user2: mapReviews.mostRelevantReviews[1].username,
+                third: mapReviews.mostRelevantReviews[2].description,
+                user3: mapReviews.mostRelevantReviews[2].username,
+            };
             if (mapReviews) {
                 document.getElementById("businessName").innerText =
                     "Business Name:\n" + mapReviews.businessName;
@@ -102,9 +111,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     "one-stars"
                 ).style.width = `${reviewWidths.oneStarWidth}%`;
 
-                document.getElementById("mostRelevantReviews").innerText =
-                    "User reviews sample:\n" + mapReviews.mostRelevantReviews;
-                // chrome.storage.local.remove(['mapQueryResults']);
+                document.getElementById("first-review").innerText =
+                    relevantReviews.first;
+                document.getElementById("username-1").innerText =
+                    relevantReviews.user1;
+                document.getElementById("second-review").innerText =
+                    relevantReviews.second;
+                document.getElementById("username-2").innerText =
+                    relevantReviews.user2;
+                document.getElementById("third-review").innerText =
+                    relevantReviews.third;
+                document.getElementById("username-3").innerText =
+                    relevantReviews.user3;
             } else {
                 document.getElementById("noReviewsFound").innerText =
                     result.mapQueryResults.message;
