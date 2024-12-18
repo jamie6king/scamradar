@@ -51,21 +51,25 @@ const getMapReviews = async (message) => {
 };
 
 chrome.runtime.onMessage.addListener((message, sender, response) => {
-    if (message.type == "mapQueryData") { 
+    if (message.type == "mapQueryData") {
         (async () => {
             try {
                 const data = await getMapReviews(message);
-                console.log(data)
-                chrome.runtime.sendMessage({
-                    type: "mapQueryResults",
-                    mapReview: data,
-                })
+                console.log("bgdata:: ", data.mapReviews);
+                chrome.storage.local.set({ 
+                    mapQueryResults: data 
+                }, () => {
+                    console.log("Data stored in chrome storage");
+                });
             } catch (error) {
                 console.error("Error while fetching map reviews:", error);
-                sendResponse({ error: error.message });
+                chrome.runtime.sendMessage({
+                    type: "mapQueryResults",
+                    error: error.message,
+                });
             }
         })();
-    return true; 
+        return true;
     }
 });
 

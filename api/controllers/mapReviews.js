@@ -34,12 +34,12 @@ const findMapReview = async (req, res) => {
         } else if (mapReview) {
             const mapReviews = {
                 query: query,
-                businessName: mapReview.title,
-                businessAddress: mapReview.address,
-                averageRating: mapReview.rating,
-                reviewsCount: mapReview.reviews,
-                ratingSummary: mapReview.rating_summary,
-                mostRelevantReviews: mapReview.most_relevant,
+                businessName: mapReview.businessName,
+                businessAddress: mapReview.businessAddress,
+                averageRating: mapReview.averageRating,
+                reviewsCount: mapReview.reviewsCount,
+                ratingSummary: mapReview.ratingSummary,
+                mostRelevantReviews: mapReview.mostRelevantReviews,
             };
             res.status(200).json({ mapReviews: mapReviews });
         }

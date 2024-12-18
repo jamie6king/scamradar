@@ -9,7 +9,7 @@
     "background": {
         "service_worker": "background.js"
     },
-    "permissions": ["activeTab", "scripting", "storage"],
+    "permissions": ["activeTab", "scripting", "storage", "runtime", "messaging"],
     "host_permissions": ["https://www.ebay.co.uk/*", "http://localhost:3000/"],
     "action": {
         "default_icon": "images/radar.png",
