@@ -31,3 +31,8 @@ Setup the DVSA API as defined in [the documentation](docs/DVSA%20MOT%20History%2
 ### Companies House
 
 ### Google Cloud Vision API
+
+Setup the Google Cloud API as defined in [the documentation](docs/Google%20Cloud%20API.md), and append these lines to the `.env` file _(replacing the parts in the angled brackets with the instructions)_:
+
+-   `GOOGLE_VISION_URL="https://vision.googleapis.com/v1/images:annotate"`
+-   `GOOGLE_VISION_API_KEY="<your Google Cloud API key>"`
