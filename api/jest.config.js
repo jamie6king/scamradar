@@ -12,6 +12,7 @@ const config = {
         "!**/test-responses/**",
         "!**/coverage/**",
         "!**/*.config.js",
+        "!**/index.js",
     ],
 };
 
