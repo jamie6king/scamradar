@@ -14,16 +14,14 @@ describe("CompaniesHouse model", () => {
                 company_number: "12345678",
                 company_status: "active",
                 date_of_creation: "2000-01-01",
-                registered_office_address: {
-                    address_line_1: "123 Example Street",
-                    postal_code: "AB1 2CD",
-                    locality: "Example Town",
-                    country: "United Kingdom",
-                },
-                accounts: {
-                    next_due: "2024-12-31",
+                confirmation_statment: {
+                    last_made_up_to: "2024-02-21",
+                    next_due: "2025-03-07",
+                    next_made_up_to: "2025-02-21",
                     overdue: false,
                 },
+                has_charges: false,
+                has_been_liquidated: false,
             },
         });
 
