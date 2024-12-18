@@ -67,21 +67,6 @@ if (listingCategory == "Motors") {
         console.log("Business seller information not found.");
     }
 
-		let motorData = null;
-
-		// const motorsDetailsElement = document.querySelector('#desc_ifr').contentDocument.querySelector('.motors-details');
-		// const motorsDetailsElement = document.querySelector(document.querySelector("body > div > div > div.motors-details-wrapper > div.motors-details > div.motors-seller-address"));
-	
-		// console.log(motorsDetailsElement)
-	
-		const iframe = document.querySelector('iframe#desc_ifr');
-		if (iframe) {
-			const iframeSrc = iframe.src;
-			chrome.runtime.sendMessage({ iframeSrc });
-		} else {
-			console.log("Iframe not found.");
-		}
-
     // Find sellers Ebay name, seller type, feedback score and number
     let sellerInfo = null;
     const sellerCard = document.querySelector(".x-sellercard-atf__info");
@@ -145,6 +130,24 @@ if (listingCategory == "Motors") {
     } else {
         console.error("Container not found!");
     }
+
+    const images = document?.querySelectorAll(".ux-image-carousel.zoom.img-transition-medium div")
+    
+    const imageUrls = Array.from(images).map(div => {
+        const img = div.querySelector('img');
+        if (img && img.hasAttribute('srcset')) {
+            const srcset = img.getAttribute('srcset');
+            const srcsetArray = srcset.split(', ').map(item => item.split(' ')[0]); 
+            return srcsetArray[srcsetArray.length - 1]; 
+        } else if (img && img.hasAttribute('data-srcset')) {
+            const dataSrcset = img.getAttribute('data-srcset');
+            const dataSrcsetArray = dataSrcset.split(', ').map(item => item.split(' ')[0]); 
+            return dataSrcsetArray[dataSrcsetArray.length - 1]; 
+        }
+        return null;
+    }).filter(Boolean);
+    
+    // console.log(imageUrls)
 
     const scrapedData = {
         title: advert_title,
