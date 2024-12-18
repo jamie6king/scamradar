@@ -4,6 +4,7 @@ const carRouter = require("./routes/car");
 const businessRouter = require("./routes/business");
 const companiesHouseRouter = require("./routes/companiesHouse");
 const mapReviewRouter = require("./routes/mapReview");
+const licensePlateRouter = require("./routes/licensePlate");
 
 //const usersRouter = require("./routes/users");
 
@@ -22,6 +23,7 @@ app.use("/car", carRouter);
 app.use("/business", businessRouter);
 app.use("/companiesHouse", companiesHouseRouter);
 app.use("/mapReview", mapReviewRouter);
+app.use("/getLicensePlate", licensePlateRouter);
 
 // 404 Handler
 app.use((_req, res) => {

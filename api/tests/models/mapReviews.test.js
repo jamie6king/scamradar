@@ -1,5 +1,6 @@
 const MapReview = require("../../models/mapReviews");
 require("../mongodb_helper");
+const mockMapFilteredJSON = require("../test-responses/mapReviewFiltered");
 
 describe("MapReviews model", () => {
     beforeEach(async () => {
@@ -52,6 +53,20 @@ describe("MapReviews model", () => {
             ],
         }).save();
         const mapReviews = await MapReview.find({});
+        expect(mapReviews[0]._id).toEqual(mapReview._id);
+    });
+    it("adds mapreview to DB when the review is large", async () => {
+        const mapReview = await new MapReview({
+            query: mockMapFilteredJSON.query,
+            businessName: mockMapFilteredJSON.businessName,
+            businessAddress: mockMapFilteredJSON.businessAddress,
+            averageRating: mockMapFilteredJSON.averageRating,
+            reviewsCount: mockMapFilteredJSON.reviewsCount,
+            ratingSummary: mockMapFilteredJSON.ratingSummary,
+            mostRelevantReviews: mockMapFilteredJSON.mostRelevantReviews,
+        }).save();
+        const mapReviews = await MapReview.find({});
+        console.log(mapReviews);
         expect(mapReviews[0]._id).toEqual(mapReview._id);
     });
 });

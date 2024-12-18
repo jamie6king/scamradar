@@ -46,17 +46,30 @@ const getMapReviews = async (message) => {
         return mapReviewData;
     } catch (error) {
         console.error("Unable to retreive reviews: ", error);
-        return { error };
+        return { error: error.message };
     }
 };
 
 chrome.runtime.onMessage.addListener((message, sender, response) => {
-    if (message.type == "mapQueryData") { (async () => {
-        // const data = await getMapReviews(message);
-        console.log(data)
-        // sendResponse(data);
-    })();
-    return true; 
+    if (message.type == "mapQueryData") {
+        (async () => {
+            try {
+                const data = await getMapReviews(message);
+                console.log("bgdata:: ", data.mapReviews);
+                chrome.storage.local.set({ 
+                    mapQueryResults: data 
+                }, () => {
+                    console.log("Data stored in chrome storage");
+                });
+            } catch (error) {
+                console.error("Error while fetching map reviews:", error);
+                chrome.runtime.sendMessage({
+                    type: "mapQueryResults",
+                    error: error.message,
+                });
+            }
+        })();
+        return true;
     }
 });
 
