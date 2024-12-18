@@ -6,7 +6,8 @@ require("dotenv").config();
 jestFetchMock.enableFetchMocks();
 
 describe("googleVisionService", () => {
-    const baseUrl = "https://vision.googleapis.com/v1/images:annotate";
+    const GOOGLE_VISION_URL = process.env.GOOGLE_VISION_URL;
+    const GOOGLE_VISION_API_KEY = process.env.GOOGLE_VISION_API_KEY;
 
     beforeEach(() => {
         fetch.resetMocks();
@@ -33,17 +34,18 @@ describe("googleVisionService", () => {
             ],
         };
 
-        const expectedUrl = `${baseUrl}?key=${process.env.GOOGLE_VISION_API_KEY}`;
-
         fetch.mockResponseOnce(JSON.stringify(googleVisionData), {
             status: 200,
         });
         const response = await getGoogleVisionText(testImgUrl);
         expect(fetch).toHaveBeenCalledWith(
-            expectedUrl,
+            GOOGLE_VISION_URL,
             expect.objectContaining({
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "x-goog-api-key": GOOGLE_VISION_API_KEY,
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify(payload),
             })
         );
