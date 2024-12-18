@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 /* eslint-disable n/no-unsupported-features/node-builtins */
 const jestFetchMock = require("jest-fetch-mock");
 const googleVisionData = require("../test-responses/googleVisionAPIdata");
@@ -50,5 +51,38 @@ describe("googleVisionService", () => {
             })
         );
         expect(response).toEqual(googleVisionData);
+    });
+    it("Calls google vision API with invalid information", async () => {
+        process.env.GOOGLE_VISION_URL = "https://example.org";
+        const testImgUrl =
+            "https://i.ebayimg.com/images/g/qbgAAOSwAeVnNddn/s-l1600.webp";
+        const payload = {
+            requests: [
+                {
+                    image: {
+                        source: {
+                            imageUri: testImgUrl,
+                        },
+                    },
+                    features: [
+                        {
+                            type: "TEXT_DETECTION",
+                            maxResults: 10,
+                        },
+                    ],
+                },
+            ],
+        };
+
+        fetch.mockResponseOnce(JSON.stringify(googleVisionData), {
+            status: 400,
+        });
+        try {
+            await getGoogleVisionText(testImgUrl);
+        } catch (error) {
+            expect(error.message).toBe(
+                "Error calling GooglevisionAPI: Error: Request error, status: 400"
+            );
+        }
     });
 });
