@@ -37,6 +37,18 @@ describe("/mapReviews", () => {
             expect(response.statusCode).toBe(201);
             expect(response.body.mapReviews).toEqual(mockMapFilteredJSON);
         });
+        it("returns a status of 404 when an invalid JSON result is passed in", async () => {
+            jestFetchMock.mockResponseOnce(JSON.stringify({}));
+            const companyName = "Cargiant";
+            const postcode = "NW10 6RS";
+            const response = await request(app).get(
+                `/mapReview/${companyName}/${postcode}`
+            );
+            expect(response.statusCode).toBe(404);
+            expect(response.body.message).toBe(
+                "The company name and postcode did not find any valid reviews, exercise caution"
+            );
+        });
         it("adds the review data to the database when it is a new query", async () => {
             const mockData = mockMapJSON;
             jestFetchMock.mockResponseOnce(JSON.stringify(mockData));
