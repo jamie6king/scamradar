@@ -2,14 +2,32 @@
 
 ## APIs
 
-- [DVSA MOT History API](docs/DVSA%20MOT%20History%20API.md)
+-   [DVLA Car API](docs/DVLA%20Car%20API.md)
+-   [DVSA MOT History API](docs/DVSA%20MOT%20History%20API.md)
 
-## .env
+## Environmental Variables
 
-- create the file
-- MONGODB_URL="mongodb://0.0.0.0/scamradar"
-- NODE_ENV="development"
-- API_KEY=replace_with_your_api_key
-- CLIENT_ID=replace_with_your_client_id
-- CLIENT_SECRET=replace_with_your_client_secret
-- TOKEN_URL=https://login.microsoftonline.com/a455b827-244f-4c97-b5b4-ce5d13b4d00c/oauth2/v2.0/token
+You need to create a `.env` file in the `api` folder, and populate with the following fields:
+
+-   `MONGODB_URL="mongodb://0.0.0.0/scamradar"`
+-   `NODE_ENV="development"`
+
+### DVLA
+
+Setup the DVLA API as defined in steps 1-2 in [the documentation](docs/DVLA%20Car%20API.md), and append these lines to the `.env` file _(replacing the parts in the angled brackets with the instructions)_:
+
+-   `DVLA_URL="<your DVLA API key provided to you>"`
+-   `DVLA_URL="https://driver-vehicle-licensing.api.gov.uk/vehicle-enquiry/v1/vehicles"`
+
+### DVSA
+
+Setup the DVSA API as defined in [the documentation](docs/DVSA%20MOT%20History%20API.md), and append these lines to the `.env` file _(replacing the parts in the angled brackets with the instructions)_:
+
+-   `DVSA_API_KEY="<your DVSA API key provided to you>"`
+-   `DVSA_CLIENT_ID="<your DVSA Client ID provided to you>"`
+-   `DVSA_CLIENT_SECRET="<your DVSA Secret provided to you>"`
+-   `DVSA_TOKEN_URL="<your DVSA / Microsoft Token URL provided to you>"`
+
+### Companies House
+
+### Google Cloud Vision API
