@@ -19,11 +19,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse({ status: "success" });
 
         const response = message.carReport.reportResults;
+        let [year, month, day] = response.motData.motTestDueDate.split("-");
+        let newMotDate = `${day}-${month}-${year}`;
+
         document.getElementById("loading").classList.add("hidden");
         document.getElementById("input").classList.add("hidden");
         document.getElementById("output").classList.remove("hidden");
 
-        document.getElementById("make").innerText = "Make:\n" + response.make;
+        document.getElementById("make").innerText = 
+            "Make:\n" + response.make;
         document.getElementById("model").innerText =
             "Model:\n" + response.model;
         document.getElementById("colour").innerText =
@@ -40,7 +44,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             "Outstanding Recalls:\n" + response.hasOutstandingRecall;
         // document.getElementById("mot-required").innerText = "MOT Required:\n" + (response.motRequired ? "Yes" : "No");
         document.getElementById("mot-due").innerText =
-            "MOT Due Date:\n" + response.motTestDueDate;
+            "MOT Due Date:\n" + newMotDate;
         // document.getElementById("mot-data").innerText = "MOT Failures:\n" + response.motFailures.map((failure) => failure);
     }
 });
