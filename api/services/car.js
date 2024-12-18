@@ -1,6 +1,7 @@
 /* eslint-disable n/no-unsupported-features/node-builtins */
 const dotenv = require("dotenv");
 dotenv.config();
+const DvlaResponse = require("../models/dvla");
 
 const DVLA_URL = process.env.DVLA_URL;
 const DVLA_API_KEY = process.env.DVLA_API_KEY;
@@ -27,9 +28,32 @@ async function getDvlaJson(registrationNumber) {
     }
 }
 
+async function findDvlaJson(registrationNumber) {
+    const dvlaResponse = await DvlaResponse.findOne({
+        numberPlate: registrationNumber,
+    });
+    if (dvlaResponse) {
+        return dvlaResponse.dvlaResponse;
+    } else {
+        return dvlaResponse;
+    }
+}
+
+async function saveDvlaJson(dvlaResponse, numberPlate) {
+    const dvlaEntry = new DvlaResponse({
+        numberPlate: numberPlate,
+        dvlaResponse: dvlaResponse,
+    });
+    await dvlaEntry.save();
+}
+
 // (async () => {
 //     const response = await getDvlaJson("SD59 LDJ");
 //     console.log(response);
 // })();
 
-module.exports = getDvlaJson;
+module.exports = {
+    getDvlaJson: getDvlaJson,
+    findDvlaJson: findDvlaJson,
+    saveDvlaJson: saveDvlaJson,
+};

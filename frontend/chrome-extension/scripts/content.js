@@ -131,6 +131,24 @@ if (listingCategory == "Motors") {
         console.error("Container not found!");
     }
 
+    const images = document?.querySelectorAll(".ux-image-carousel.zoom.img-transition-medium div")
+    
+    const imageUrls = Array.from(images).map(div => {
+        const img = div.querySelector('img');
+        if (img && img.hasAttribute('srcset')) {
+            const srcset = img.getAttribute('srcset');
+            const srcsetArray = srcset.split(', ').map(item => item.split(' ')[0]); 
+            return srcsetArray[srcsetArray.length - 1]; 
+        } else if (img && img.hasAttribute('data-srcset')) {
+            const dataSrcset = img.getAttribute('data-srcset');
+            const dataSrcsetArray = dataSrcset.split(', ').map(item => item.split(' ')[0]); 
+            return dataSrcsetArray[dataSrcsetArray.length - 1]; 
+        }
+        return null;
+    }).filter(Boolean);
+    
+    // console.log(imageUrls)
+
     const scrapedData = {
         title: advert_title,
         price: price,

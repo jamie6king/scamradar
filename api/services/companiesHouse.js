@@ -23,18 +23,18 @@ async function getCompanyHouseJson(companyNumber) {
     if (response.status === 200) {
         const data = await response.json();
         return {
-            Company_Name: data.company_name,
-            Company_Number: data.company_number,
-            Company_Status: data.company_status,
-            Confirmation_Statement: {
+            company_name: data.company_name,
+            company_number: data.company_number,
+            company_status: data.company_status,
+            confirmation_statement: {
                 last_made_up_to: data.confirmation_statement.last_made_up_to,
                 next_due: data.confirmation_statement.next_due,
                 next_made_up_to: data.confirmation_statement.next_made_up_to,
                 overdue: data.confirmation_statement.overdue,
             },
-            Date_Founded: data.date_of_creation,
-            Has_Charges: data.has_charges,
-            Has_Been_Liquidated: data.has_been_liquidated,
+            date_of_creation: data.date_of_creation,
+            has_charges: data.has_charges,
+            has_been_liquidated: data.has_been_liquidated,
         };
     } else if (response.status === 404) {
         const data = await response.json();

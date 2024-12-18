@@ -1,20 +1,10 @@
 const mongoose = require("mongoose");
 
-const DvsaTokenSchema = new mongoose.Schema({
-    access_token: {
-        type: String,
-        required: true,
-    },
-    expires_in: {
-        type: Number,
-        required: true,
-    },
-    last_update: {
-        type: Date,
-        default: Date.now(),
-    },
+const DvsaResponseSchema = new mongoose.Schema({
+    numberPlate: { type: String, required: true, unique: true },
+    dvsaResponse: { type: Object, required: true },
 });
 
-const DvsaToken = mongoose.model("DvsaToken", DvsaTokenSchema);
+const DvsaResponse = mongoose.model("DvsaResponse", DvsaResponseSchema);
 
-module.exports = DvsaToken;
+module.exports = DvsaResponse;

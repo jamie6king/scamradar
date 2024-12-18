@@ -9,7 +9,7 @@ async function companyReport(req, res) {
     }
 
     const companyData = await getCompanyHouseJson(companyNumber);
-    if (companyData) {
+    if (companyData.errors === undefined) {
         return res.status(200).json({
             reportResults: companyData,
         });
