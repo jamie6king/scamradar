@@ -87,6 +87,24 @@ const getMapReviews = async (message) => {
     }
 };
 
+const getCompanyInfo = async (message) => {
+    const businessNumber = message.businessNumber;
+    try {
+        const response = await fetch("http://localhost:3000/companiesHouse", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ companyNumber: businessNumber }),
+        });
+        const companyInfo = await response.json();
+        return companyInfo;
+    } catch (error) {
+        console.error("Unable to retreive company info: ", error);
+        return { error: error.message };
+    }
+};
+
 chrome.runtime.onMessage.addListener((message, sender, response) => {
     if (message.type == "mapQueryData") {
         (async () => {
@@ -110,6 +128,27 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
             }
         })();
         return true;
+    } else if (message.type == "businessNumberData") {
+        (async () => {
+            try {
+                const data = await getCompanyInfo(message);
+                console.log("chdata:: ", data.companyInfo);
+                chrome.storage.local.set(
+                    {
+                        companyInfo: data,
+                    },
+                    () => {
+                        console.log("Data stored in chrome storage");
+                    }
+                );
+            } catch (error) {
+                console.error("Error while fetching company info:", error);
+                chrome.runtime.sendMessage({
+                    type: "businessNumberResults",
+                    error: error.message,
+                });
+            }
+        })();
     }
 });
 
