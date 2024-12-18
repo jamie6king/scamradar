@@ -19,7 +19,6 @@ beforeEach(() => {
     fetch.resetMocks();
 });
 
-
 global.fetch = jest.fn();
 
 describe("getMotInfo", () => {
