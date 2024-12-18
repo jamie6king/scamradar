@@ -16,7 +16,7 @@
     - Key: `client_secret`, Value: your `Client Secret`.
     - Key: `grant_type`, Value `client_credentials`.
 7. Click send.
-8. In the body of the response, there should be a long `access_token`. I think it is valid for 1 hour.
+8. In the body of the response, there should be a long `access_token`, which is valid for 1 hour.
 9. Create a new `GET` request with the url set to: `https://history.mot.api.gov.uk/v1/trade/vehicles/registration/<number_plate>`, replacing the `<number_plate>` with the wanted number plate.
 10. Click on the 'authorization' tab and change the 'Auth Type' to 'Bearer Token'.
 11. Set the 'token' field to the token given in step 8.
