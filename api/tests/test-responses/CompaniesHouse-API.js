@@ -1,6 +1,6 @@
 const CompaniesHouse200MockJSON = {
     company_name: "Example Company Ltd",
-    company_number: "09278648",
+    company_number: "12345678",
     company_status: "active",
     confirmation_statement: {
         last_made_up_to: "2024-10-24",
