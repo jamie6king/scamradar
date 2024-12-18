@@ -52,4 +52,6 @@ jobs:
                   DVSA_CLIENT_ID: ${{ secrets.DVSA_CLIENT_ID }}
                   DVSA_CLIENT_SECRET: ${{ secrets.DVSA_CLIENT_SECRET }}
                   DVSA_TOKEN_URL: ${{ secrets.DVSA_TOKEN_URL }}
+                  GOOGLE_VISION_URL: ${{ vars.GOOGLE_VISION_URL }}
+                  GOOGLE_VISION_API_KEY: ${{ secrets.GOOGLE_VISION_API_KEY }}
               run: npm --prefix=api run test
