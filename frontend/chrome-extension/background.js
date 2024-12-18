@@ -35,6 +35,43 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     }
 });
 
+const getMostCommonPlate = async (message) => {
+    const imageUrls = message.imageUrls;
+    try {
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(imageUrls),
+        };
+        const response = await fetch(
+            `http://localhost:3000/getLicensePlate/`,
+            requestOptions
+        );
+        const licensePlateData = await response.json();
+        console.log(licensePlateData);
+        return licensePlateData;
+    } catch (error) {
+        console.error("Unable to retreive license plate from image: ", error);
+        return { error: error.message };
+    }
+};
+
+chrome.runtime.onMessage.addListener((message, sender, response) => {
+    if (message.type == "imageUrls") {
+        (async () => {
+            try {
+                const data = await getMostCommonPlate(message);
+                console.log("plate: ", data.licensePlate);
+            } catch (error) {
+                console.error("Error while fetching license plates", error);
+            }
+        })();
+        return true;
+    }
+});
+
 const getMapReviews = async (message) => {
     const companyName = message.mapQueryData.companyName;
     const companyPostcode = message.mapQueryData.companyPostcode;
@@ -56,11 +93,14 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
             try {
                 const data = await getMapReviews(message);
                 console.log("bgdata:: ", data.mapReviews);
-                chrome.storage.local.set({ 
-                    mapQueryResults: data 
-                }, () => {
-                    console.log("Data stored in chrome storage");
-                });
+                chrome.storage.local.set(
+                    {
+                        mapQueryResults: data,
+                    },
+                    () => {
+                        console.log("Data stored in chrome storage");
+                    }
+                );
             } catch (error) {
                 console.error("Error while fetching map reviews:", error);
                 chrome.runtime.sendMessage({
