@@ -5,7 +5,6 @@ const app = require("../../app");
 // const MapReview = require("../../models/mapReviews");
 require("../mongodb_helper");
 jestFetchMock.enableFetchMocks();
-const getGoogleVisionText = require("../../services/googleVision")
 
 describe("/getLicensePlate", () => {
     afterEach(() => {
@@ -30,13 +29,11 @@ describe("/getLicensePlate", () => {
             const imgUrl =
                 "https://i.ebayimg.com/images/g/qbgAAOSwAeVnNddn/s-l1600.webp";
 
-            const getData = await getGoogleVisionText(imgUrl);
-            console.log(getData.responses);
-            // const response = await request(app).get(
-            //     `/getLicensePlate/${encodeURIComponent(imgUrl)}`
-            // );
-            // console.log(response.body);
-            // expect(response.statusCode).toBe(201);
+            const response = await request(app).get(
+                `/getLicensePlate/${encodeURIComponent(imgUrl)}`
+            );
+            console.log(response.body);
+            expect(response.statusCode).toBe(201);
         });
     });
 });

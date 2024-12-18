@@ -12,7 +12,6 @@ const getLicensePlate = async (req, res) => {
     const licensePlate = isoTextSpaces.match(regex);
     console.log(licensePlate[0]);
 
-
     res.status(201).json({ licensePlate: licensePlate[0] });
 };
 
