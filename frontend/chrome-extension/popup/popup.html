@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>ScamRadar</title>
-        <link rel="stylesheet" href="popup.css">
+        <link rel="stylesheet" href="popup.css" />
     </head>
     <body>
         <div id="header">
@@ -21,20 +21,42 @@
                 <button type="submit" id="formSubmit">Submit</button>
             </form>
         </div>
-        <div id="output" class="hidden">
-            <p id="make"></p>
-            <p id="model"></p>
-            <p id="colour"></p>
-            <p id="fuel-type"></p>
-            <p id="registration-date"></p>
-            <p id="mileage"></p>
-            <p id="tax-status"></p>
-            <p id="outstanding-recall"></p>
-            <p id="mot-required"></p>
-            <p id="mot-due"></p>
-          <button id="expandReviews">Show review data</button>
+
+        <div id="loading" class="hidden">
+            <p>loading....</p>
         </div>
+
+        <div id="output" class="hidden">
+            <button class="accordion">Car Info</button>
+            <!-- work on a toggle toggle-sign -->
+            <!-- <span class="toggle-sign">+</span> -->
+            <div class="panel">
+                <p id="make"></p>
+                <p id="model"></p>
+                <p id="colour"></p>
+                <p id="fuel-type"></p>
+                <p id="registration-date"></p>
+                <p id="mileage"></p>
+                <p id="tax-status"></p>
+                <p id="outstanding-recall"></p>
+                <p id="mot-required"></p>
+                <p id="mot-due"></p>
+            </div>
+            <button class="accordion">Business Info</button>
+            <div class="panel">
+                <p>test 1</p>
+                <p>test 2</p>
+            </div>
+            <button class="accordion" id="expandReviews">
+                Show review data
+            </button>
+            <div class="panel">
+                <p>rewview dataaaaaa</p>
+            </div>
+        </div>
+
         <script src="popup.js"></script>
+        <script src="accordion.js"></script>
         <!-- <script src="results.js"></script> -->
     </body>
 </html>
