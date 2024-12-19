@@ -16,7 +16,6 @@ describe("license plate image data", () => {
         const foundLicensePlate = await LicensePlateImage.findOne({
             imageUrl: licensePlateImage.imageUrl,
         });
-        console.log(foundLicensePlate);
         expect(foundLicensePlate.imageUrl).toEqual(licensePlateImage.imageUrl);
         expect(foundLicensePlate.licensePlatesInImage).toEqual(
             licensePlateImage.licensePlatesInImage
