@@ -92,6 +92,7 @@ const processImgText = (imgText) => {
 const getMostCommonLicensePlate = async (req, res) => {
     const imgUrlArray = req.body;
     const outputPlates = [];
+    let passes = 5;
 
     // To pass that last goddamn test!
     const validImgUrls = imgUrlArray.filter((url) => url && url.trim() !== "");
@@ -101,21 +102,27 @@ const getMostCommonLicensePlate = async (req, res) => {
     }
 
     for (let url of validImgUrls) {
-        const urlInDatabase = await LicensePlateImage.findOne({
-            imageUrl: url,
-        });
-        if (urlInDatabase) {
-            // console.log("image found in db");
-            outputPlates.push(urlInDatabase.licensePlatesInImage);
-        } else {
-            // console.log("image found from api");
-            const textInImage = await getGoogleVisionText(url);
-            const licensePlatesInImage = processImgText(textInImage);
-            outputPlates.push(licensePlatesInImage);
-            await new LicensePlateImage({
+        console.log(url);
+        if (passes > 0) {
+            const urlInDatabase = await LicensePlateImage.findOne({
                 imageUrl: url,
-                licensePlatesInImage: licensePlatesInImage,
-            }).save();
+            });
+            if (urlInDatabase) {
+                // console.log("image found in db");
+                outputPlates.push(urlInDatabase.licensePlatesInImage);
+            } else {
+                // console.log("image found from api");
+                const textInImage = await getGoogleVisionText(url);
+                const licensePlatesInImage = processImgText(textInImage);
+                outputPlates.push(licensePlatesInImage);
+                await new LicensePlateImage({
+                    imageUrl: url,
+                    licensePlatesInImage: licensePlatesInImage,
+                }).save();
+            }
+            passes--;
+        } else {
+            break;
         }
     }
     const filteredOutputPlates = outputPlates

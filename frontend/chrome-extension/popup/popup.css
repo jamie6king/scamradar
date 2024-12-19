@@ -123,6 +123,10 @@ button:hover {
 
 #header {
     text-align: center;
+
+    img {
+        width: 30%;
+    }
 }
 
 #input {

@@ -1,6 +1,7 @@
 window.onload = () => {
     const form = document.querySelector("form");
     form.onsubmit = submitted.bind(form);
+    chrome.storage.local.remove("numberPlateResults");
 };
 
 function submitted(event) {
@@ -227,6 +228,21 @@ document.addEventListener("DOMContentLoaded", () => {
         if (result.accountAgeWarning) {
             document.getElementById("account-age").innerText =
             result.accountAgeWarning;
+        }
+    });
+
+    const numberPlateForm = document.getElementById("textInput");
+    chrome.storage.local.get(["numberPlateResults"], (result) => {
+        if (result.numberPlateResults) {
+            document.getElementById("loading").classList.add("hidden");
+            document.getElementById("input").classList.remove("hidden");
+            if (
+                numberPlateForm.value.length == 0 &&
+                result.numberPlateResults.mostCommonPlate != undefined
+            ) {
+                numberPlateForm.value =
+                    result.numberPlateResults.mostCommonPlate;
+            }
         }
     });
 });

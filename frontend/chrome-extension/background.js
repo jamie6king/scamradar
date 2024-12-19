@@ -63,7 +63,14 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
         (async () => {
             try {
                 const data = await getMostCommonPlate(message);
-                console.log("plate: ", data.licensePlate);
+                chrome.storage.local.set(
+                    {
+                        numberPlateResults: data,
+                    },
+                    () => {
+                        console.log("Data stored in chrome storage");
+                    }
+                );
             } catch (error) {
                 console.error("Error while fetching license plates", error);
             }
