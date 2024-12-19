@@ -5,22 +5,24 @@
         <link rel="stylesheet" href="popup.css" />
     </head>
     <body>
-        <div id="header">
-            <h2>ScamRadar</h2>
-        </div>
-        <!-- <button id="expandReviews">Start sniffing!</button> -->
-        <div id="input">
-            <form>
-                <label for="textInput">Enter Text:</label>
-                <input
-                    type="text"
-                    id="textInput"
-                    name="textInput"
-                    placeholder="Enter Registration"
-                    required
-                />
-                <button type="submit" id="formSubmit">Submit</button>
-            </form>
+        <div id="input" class="front-page">
+            <div id="header">
+                <h2>ScamRadar</h2>
+            </div>
+            <!-- <button id="expandReviews">Start sniffing!</button> -->
+            <div>
+                <form>
+                    <label for="textInput">Enter Text:</label>
+                    <input
+                        type="text"
+                        id="textInput"
+                        name="textInput"
+                        placeholder="Enter Registration"
+                        required
+                    />
+                    <button type="submit" id="formSubmit">Submit</button>
+                </form>
+            </div>
         </div>
 
         <div id="loading" class="loading hidden"></div>
@@ -38,16 +40,61 @@
                 <!-- work on a toggle toggle-sign -->
                 <!-- <span class="toggle-sign">+</span> -->
                 <div id="Car" class="tabContent">
-                    <p id="make"></p>
-                    <p id="model"></p>
-                    <p id="colour"></p>
-                    <p id="fuel-type"></p>
-                    <p id="registration-date"></p>
-                    <p id="mileage"></p>
-                    <p id="tax-status"></p>
-                    <p id="outstanding-recall"></p>
-                    <p id="mot-required"></p>
-                    <p id="mot-due"></p>
+                    <div class="response-box">
+                        <p>Make:</p>
+                        <p id="make"></p>
+                        <p id="tick-cross">icon!</p>
+                    </div>
+                    <div class="response-box">
+                        <p>Model:</p>
+                        <p id="model"></p>
+                        <p id="tick-cross">icon!</p>
+                    </div>
+                    <div class="response-box">
+                        <p>Colour:</p>
+                        <p id="colour"></p>
+                        <p id="tick-cross">icon!</p>
+                    </div>
+                    <div class="response-box">
+                        <p>Fuel-Type:</p>
+                        <p id="fuel-type"></p>
+                        <p id="tick-cross">icon!</p>
+                    </div>
+                    <div class="response-box">
+                        <p>Registration-Date:</p>
+                        <p id="registration-date"></p>
+                        <p id="tick-cross">icon!</p>
+                    </div>
+
+                    <div class="response-box">
+                        <p>Mileage:</p>
+                        <p id="mileage"></p>
+                        <p id="tick-cross">icon!</p>
+                    </div>
+
+                    <div class="response-box">
+                        <p>Tax Status:</p>
+                        <p id="tax-status"></p>
+                        <p id="tick-cross">icon!</p>
+                    </div>
+
+                    <div class="response-box">
+                        <p>Outstanding-Recall:</p>
+                        <p id="outstanding-recall"></p>
+                        <p id="tick-cross">icon!</p>
+                    </div>
+
+                    <div class="response-box">
+                        <p>MOT Required:</p>
+                        <p id="mot-required"></p>
+                        <p id="tick-cross">icon!</p>
+                    </div>
+
+                    <div class="response-box">
+                        <p>MOT Due Date:</p>
+                        <p id="mot-due"></p>
+                        <p id="tick-cross">icon!</p>
+                    </div>
                 </div>
 
                 <div id="Business" class="tabContent">
@@ -111,9 +158,5 @@
         <script src="popup.js"></script>
         <script src="accordion.js"></script>
         <script src="reviews-accordion.js"></script>
-        <script
-            src="https://kit.fontawesome.com/a076d05399.js"
-            crossorigin="anonymous"
-        ></script>
     </body>
 </html>

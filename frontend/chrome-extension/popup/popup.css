@@ -1,20 +1,33 @@
 /* popup.css */
 body {
     font-family: Arial, sans-serif;
-    background-color: #233142;
+    background-color: #edf2f4;
     width: 600px;
     height: 600px;
     display: flex;
     flex-direction: column;
-    color: #e3e3e3;
+    color: #2b2d42;
     margin: 0px;
+    border-radius: 10px;
 }
 
 pre {
-    background-color: #ffffff;
+    background-color: #edf2f4;
     border-radius: 5px;
     padding: 10px;
-    /* border: 1px solid #ccc; */
+}
+
+.front-page {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
+}
+
+.response-box {
+    display: flex;
+    justify-content: space-between;
 }
 
 form {
@@ -60,8 +73,14 @@ button:hover {
     overflow: auto;
 }
 
+.reviews-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .reviews-accordion {
-    background-color: #455d7a;
+    background-color: #8d99ae;
     color: #444;
     cursor: pointer;
     width: 100%;
@@ -73,6 +92,7 @@ button:hover {
 
 .panel {
     display: none;
+    margin-bottom: 10px;
 }
 
 .tab-content-container {
@@ -81,7 +101,7 @@ button:hover {
 }
 .tab {
     float: left;
-    background-color: #233142;
+    background-color: #8d99ae;
     width: 20%;
     height: 100%;
     display: flex;
@@ -91,7 +111,7 @@ button:hover {
 
 .tablinks {
     display: block;
-    background-color: #455d7a;
+    background-color: #2b2d42;
     height: 33.33%;
     width: 100%;
     border: none;
@@ -103,16 +123,23 @@ button:hover {
 }
 
 .tablinks:hover {
-    background-color: #233142;
+    background-color: #edf2f4;
+    color: #2b2d42;
 }
 
 .tablinks.active {
-    background-color: #233142;
+    background-color: #edf2f4;
+    color: #2b2d42;
 }
 
-.active,
 .reviews-accordion:hover {
-    background-color: #455d7a;
+    background-color: #edf2f4;
+    color: #2b2d42;
+}
+
+.reviews-accordion:active {
+    background-color: #59dc08;
+    color: #2b2d42;
 }
 
 .tabContent {
@@ -121,11 +148,12 @@ button:hover {
     border-left: none;
     height: auto;
     display: none;
+    margin: 40px;
 }
 
 .loading {
     border: 8px solid #f3f3f3;
-    border-top: 8px solid #f95959;
+    border-top: 8px solid #ef233c;
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -147,6 +175,7 @@ button:hover {
     display: flex;
     flex-direction: row;
     width: 400px;
+    margin-bottom: 10px;
 }
 
 .progress-container {
@@ -159,13 +188,13 @@ button:hover {
 }
 .ratings {
     height: auto;
-    background-color: #455d7a;
+    background-color: #2b2d42;
     border-radius: 10px;
     margin-bottom: 10px;
 }
 
 .stars {
-    background-color: #f95959;
+    background-color: #59dc08;
     height: 10px;
     border-radius: 10px;
 }
