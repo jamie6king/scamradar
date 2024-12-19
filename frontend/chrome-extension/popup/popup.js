@@ -91,7 +91,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         document.getElementById("tax-status").innerText = response.taxStatus;
 
-        if (response.taxStatus.slice(0, 4) === "Pass") {
+        if (response.taxStatus.slice(0, 5) === "Taxed") {
             document.getElementById("tax-tick-cross").innerText = tick;
             document.getElementById("tax-tick-cross").style.color = "green";
         } else {
@@ -100,10 +100,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }
         document.getElementById("outstanding-recall").innerText =
             response.hasOutstandingRecall;
-        if (response.hasOutstandingRecall.slice(0, 4) === "Pass") {
-            document.getElementById("recall-tick-cross").innerText = tick;
-            document.getElementById("recall-tick-cross").style.color = "green";
-        } else {
+        if (response.hasOutstandingRecall.slice(0, 3).toLowerCase() === "yes") {
             document.getElementById("recall-tick-cross").innerText = cross;
             document.getElementById("recall-tick-cross").style.color =
                 "#EF233C";
@@ -195,9 +192,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
     chrome.storage.local.get(["companyInfo"], (result) => {
+        console.log("company results:   ", result);
+
         if (result.companyInfo) {
-            document.getElementById("businessInfo").innerText =
-                JSON.stringify(result);
+            const data = result.companyInfo.reportResults;
+            const companyDetails = {
+                name: data.company_name,
+                number: data.company_number,
+                status: data.company_status,
+                overdueAccounts: data.confirmation_statement.overdue,
+            };
+            document.getElementById("company-name").innerText =
+                companyDetails.name;
+            document.getElementById("company-number").innerText =
+                companyDetails.number;
+            document.getElementById("company-status").innerText =
+                companyDetails.status;
+            document.getElementById("company-accounts").innerText =
+                companyDetails.overdueAccounts;
         }
     });
 });
+
+// {"companyInfo":{"reportResults":{"company_name":"BERKSHIRE CAR PLANET LTD","company_number":"15357162","company_status":"active","confirmation_statement":{"next_due":"2024-12-30","next_made_up_to":"2024-12-16","overdue":false},"date_of_creation":"2023-12-17","has_charges":false}}}
