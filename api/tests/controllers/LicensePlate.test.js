@@ -126,18 +126,10 @@ describe("/getLicensePlate", () => {
         it("returns license plates from more complex data", async () => {
             const mockData1 = complexVisionData;
             const mockData2 = {
-                responses: [
-                    {
-                        textAnnotations: [
-                            {
-                                description: "",
-                            },
-                        ],
-                    },
-                ],
+                responses: [{}],
             };
-            jestFetchMock.mockResponseOnce(JSON.stringify(mockData1));
-            jestFetchMock.mockResponse(JSON.stringify(mockData2));
+            jestFetchMock.mockResponseOnce(JSON.stringify(mockData2));
+            jestFetchMock.mockResponse(JSON.stringify(mockData1));
 
             const imgArray = [
                 "https://i.ebayimg.com/images/g/slEAAOSwDD5nYECl/s-l1600.webp",
