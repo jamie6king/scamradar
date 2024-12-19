@@ -83,7 +83,7 @@ pre {
 .business-response {
     display: grid;
     /* justify-content: space-between; */
-    grid-template-columns: 100px 300px;
+    grid-template-columns: 75px 275px 50px;
     align-items: center;
 }
 
@@ -259,7 +259,6 @@ button:hover {
 }
 
 .stars {
-    background-color: #59dc08;
     height: 10px;
     border-radius: 10px;
 }

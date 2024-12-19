@@ -1,3 +1,6 @@
+const tick = "\u2713";
+const cross = "\u2717";
+
 window.onload = () => {
     const form = document.querySelector("form");
     form.onsubmit = submitted.bind(form);
@@ -18,8 +21,6 @@ function submitted(event) {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    const tick = "\u2713";
-    const cross = "\u2717";
     if (message.type === "results") {
         sendResponse({ status: "success" });
 
@@ -204,6 +205,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 "no data received";
             document.getElementById("no-company-details-2").innerText =
                 "no data received";
+            document.getElementById("no-company-details-3").innerText =
+                "no data received";
+            document.getElementById("no-company-details-4").innerText =
+                "no data received";
         }
 
         if (result.companyInfo) {
@@ -225,9 +230,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
     chrome.storage.local.get(["accountAgeWarning"], (result) => {
-        if (result.accountAgeWarning) {
+        if (
+            result.accountAgeWarning === "eBay account more than 6 months old"
+        ) {
             document.getElementById("account-age").innerText =
-            result.accountAgeWarning;
+                result.accountAgeWarning;
+            document.getElementById("account-age-tick-cross").innerText = tick;
+            document.getElementById("account-age-tick-cross").style.color =
+                "green";
+        } else {
+            document.getElementById("account-age").innerText =
+                result.accountAgeWarning;
+            document.getElementById("account-age-tick-cross").innerText = cross;
+            document.getElementById("account-age-tick-cross").style.color =
+                "#EF233C";
         }
     });
 
@@ -246,7 +262,5 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
-
-
 
 // {"companyInfo":{"reportResults":{"company_name":"BERKSHIRE CAR PLANET LTD","company_number":"15357162","company_status":"active","confirmation_statement":{"next_due":"2024-12-30","next_made_up_to":"2024-12-16","overdue":false},"date_of_creation":"2023-12-17","has_charges":false}}}
