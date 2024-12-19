@@ -7,6 +7,8 @@ function submitted(event) {
     event.preventDefault();
     const registrationNumber = event.target.textInput.value;
     document.getElementById("loading").classList.remove("hidden");
+    document.getElementById("input").classList.add("hidden");
+    document.getElementById("header").classList.add("hidden");
     chrome.runtime.sendMessage({
         type: "registrationNumber",
         registrationNumber: registrationNumber,
@@ -23,29 +25,22 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         let newMotDate = `${day}-${month}-${year}`;
 
         setTimeout(() => {
-            document.getElementById("input").classList.add("hidden");
             document.getElementById("loading").classList.add("hidden");
             document.getElementById("output").classList.remove("hidden");
         }, 1500);
 
-        document.getElementById("make").innerText = "Make:\n" + response.make;
-        document.getElementById("model").innerText =
-            "Model:\n" + response.model;
-        document.getElementById("colour").innerText =
-            "Colour:\n" + response.colour;
-        document.getElementById("fuel-type").innerText =
-            "Fuel Type:\n" + response.fuelType;
+        document.getElementById("make").innerText = response.make;
+        document.getElementById("model").innerText = response.model;
+        document.getElementById("colour").innerText = response.colour;
+        document.getElementById("fuel-type").innerText = response.fuelType;
         document.getElementById("registration-date").innerText =
-            "Registration Date:\n" + response.registrationDate;
-        document.getElementById("mileage").innerText =
-            "Mileage:\n" + response.mileage;
-        document.getElementById("tax-status").innerText =
-            "Tax Status:\n" + response.taxStatus;
+            response.registrationDate;
+        document.getElementById("mileage").innerText = response.mileage;
+        document.getElementById("tax-status").innerText = response.taxStatus;
         document.getElementById("outstanding-recall").innerText =
-            "Outstanding Recalls:\n" + response.hasOutstandingRecall;
+            response.hasOutstandingRecall;
         // document.getElementById("mot-required").innerText = "MOT Required:\n" + (response.motRequired ? "Yes" : "No");
-        document.getElementById("mot-due").innerText =
-            "MOT Due Date:\n" + newMotDate;
+        document.getElementById("mot-due").innerText = newMotDate;
         // document.getElementById("mot-data").innerText = "MOT Failures:\n" + response.motFailures.map((failure) => failure);
     }
 });
@@ -127,6 +122,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("noReviewsFound").innerText =
                     result.mapQueryResults.message;
             }
+        }
+    });
+    chrome.storage.local.get(["companyInfo"], (result) => {
+        alert(JSON.stringify(result));
+        if (result.companyInfo) {
+            alert(JSON.stringify(result));
+            document.getElementById("businessInfo").innerText =
+                JSON.stringify(result);
         }
     });
 });

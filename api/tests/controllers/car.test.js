@@ -164,12 +164,13 @@ describe("POST / with valid registrationNumber in request JSON", () => {
 
             expect(response.body).toEqual({
                 reportResults: {
-                    make: "Fail: should be FORD",
-                    model: "Fail: should be FOCUS",
-                    colour: "Fail: should be RED",
-                    fuelType: "Fail: should be PETROL",
-                    registrationDate: "Fail: should be 2019",
-                    mileage: "Fail: should be 30000 miles",
+                    make: "Fail: BMW should be FORD",
+                    model: "Fail: X5 should be FOCUS",
+                    colour: "Fail: Black should be RED",
+                    fuelType: "Fail: JetFuel should be PETROL",
+                    registrationDate: "Fail: 2055 should be 2019",
+                    mileage:
+                        "Fail: 200 miles is less than last MOT reading: 30000 miles",
                     taxStatus: "Taxed",
                     hasOutstandingRecall: "No",
                     motData: {

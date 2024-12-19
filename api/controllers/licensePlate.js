@@ -17,7 +17,7 @@
 //     "MH65 FBU",
 //     "SH56 BFV",
 // ];
-
+const LicensePlateImage = require("../models/licensePlateImage");
 const getGoogleVisionText = require("../services/googleVision");
 
 const getLicensePlate = async (req, res) => {
@@ -67,17 +67,57 @@ const processImgText = (imgText) => {
     }
 };
 
+// ORIGINAL
+// const getMostCommonLicensePlate = async (req, res) => {
+//     const imgUrlArray = req.body;
+//     const outputPlates = [];
+
+//     const licensePlates = await Promise.all(
+//         imgUrlArray.map(async (url) => await getGoogleVisionText(url))
+//     );
+
+//     licensePlates.forEach((imgText) =>
+//         outputPlates.push(processImgText(imgText))
+//     );
+//     const filteredOutputPlates = outputPlates
+//         .flat()
+//         .filter((plate) => plate != undefined);
+//     const mostCommonPlate = getMostCommon(filteredOutputPlates);
+
+//     console.log("Most common: ", mostCommonPlate);
+//     return res.status(200).json({ mostCommonPlate });
+// };
+
+// WITH DATABASE INTERACTION
 const getMostCommonLicensePlate = async (req, res) => {
     const imgUrlArray = req.body;
     const outputPlates = [];
 
-    const licensePlates = await Promise.all(
-        imgUrlArray.map(async (url) => await getGoogleVisionText(url))
-    );
+    // To pass that last goddamn test!
+    const validImgUrls = imgUrlArray.filter((url) => url && url.trim() !== "");
 
-    licensePlates.forEach((imgText) =>
-        outputPlates.push(processImgText(imgText))
-    );
+    if (validImgUrls.length === 0) {
+        return res.status(200).json({ mostCommonPlate: undefined });
+    }
+
+    for (let url of validImgUrls) {
+        const urlInDatabase = await LicensePlateImage.findOne({
+            imageUrl: url,
+        });
+        if (urlInDatabase) {
+            // console.log("image found in db");
+            outputPlates.push(urlInDatabase.licensePlatesInImage);
+        } else {
+            // console.log("image found from api");
+            const textInImage = await getGoogleVisionText(url);
+            const licensePlatesInImage = processImgText(textInImage);
+            outputPlates.push(licensePlatesInImage);
+            await new LicensePlateImage({
+                imageUrl: url,
+                licensePlatesInImage: licensePlatesInImage,
+            }).save();
+        }
+    }
     const filteredOutputPlates = outputPlates
         .flat()
         .filter((plate) => plate != undefined);
