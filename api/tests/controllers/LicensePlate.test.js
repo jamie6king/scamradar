@@ -2,6 +2,7 @@ const request = require("supertest");
 const jestFetchMock = require("jest-fetch-mock");
 const googleVisionDataRaw = require("../test-responses/googleVisionAPIdata");
 const complexVisionData = require("../test-responses/googleVisionAPIComplex");
+const LicensePlateImage = require("../../models/licensePlateImage");
 
 const app = require("../../app");
 // const MapReview = require("../../models/mapReviews");
@@ -9,8 +10,9 @@ require("../mongodb_helper");
 jestFetchMock.enableFetchMocks();
 
 describe("/getLicensePlate", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         jestFetchMock.resetMocks();
+        await LicensePlateImage.deleteMany({});
     });
 
     afterEach(() => {
@@ -118,7 +120,6 @@ describe("/getLicensePlate", () => {
             const response = await request(app)
                 .post("/getLicensePlate")
                 .send([...imgArray]);
-            console.log(response.body);
             expect(response.statusCode).toBe(200);
             expect(response.body.mostCommonPlate).toEqual("WD66 HXS");
         });
@@ -138,7 +139,6 @@ describe("/getLicensePlate", () => {
             const response = await request(app)
                 .post("/getLicensePlate")
                 .send([...imgArray]);
-            console.log(response.body);
             expect(response.statusCode).toBe(200);
             expect(response.body.mostCommonPlate).toEqual("WD66 HXS");
         });
@@ -184,6 +184,32 @@ describe("/getLicensePlate", () => {
                 .send([...imgArray]);
             expect(response.statusCode).toBe(200);
             expect(response.body.mostCommonPlate).toEqual(undefined);
+        });
+        it("returns license plate if found in database", async () => {
+            const mockData = complexVisionData;
+            jestFetchMock.mockResponse(JSON.stringify(mockData));
+
+            const imgArray = [
+                "https://i.ebayimg.com/images/g/slEAAOSwDD5nYECl/s-l1600.webp",
+                "https://i.ebayimg.com/images/g/EIkAAOSw2DZnYECl/s-l1600.webp",
+                "https://i.ebayimg.com/images/g/Qb0AAOSw-ChnYECl/s-l1600.webp",
+                "https://i.ebayimg.com/images/g/pVwAAOSwH65nYECr/s-l1600.webp",
+                "https://i.ebayimg.com/images/g/RbYAAOSwrOxnYECl/s-l1600.webp",
+                "https://i.ebayimg.com/images/g/e1MAAOSwpIJnYECl/s-l1600.webp",
+            ];
+            jestFetchMock.mockResponse(JSON.stringify(mockData));
+
+            const storedImage = new LicensePlateImage({
+                imageUrl:
+                    "https://i.ebayimg.com/images/g/slEAAOSwDD5nYECl/s-l1600.webp",
+                licensePlatesInImage: ["WD66 HXS"],
+            });
+            storedImage.save();
+            const response = await request(app)
+                .post("/getLicensePlate")
+                .send([...imgArray]);
+            expect(response.statusCode).toBe(200);
+            expect(response.body.mostCommonPlate).toEqual("WD66 HXS");
         });
     });
 });

@@ -1,20 +1,20 @@
 /* popup.css */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    padding: 10px;
-    width: 500px;
-    height: 500px;
-    overflow: scroll;
+    background-color: #233142;
+    width: 600px;
+    height: 600px;
     display: flex;
     flex-direction: column;
+    color: #e3e3e3;
+    margin: 0px;
 }
 
 pre {
     background-color: #ffffff;
     border-radius: 5px;
     padding: 10px;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
 }
 
 form {
@@ -32,7 +32,7 @@ input {
 
 button {
     padding: 5px 10px;
-    background-color: #0078d4;
+    background-color: #f95959;
     color: white;
     border: none;
     border-radius: 3px;
@@ -61,7 +61,7 @@ button:hover {
 }
 
 .reviews-accordion {
-    background-color: #eee;
+    background-color: #455d7a;
     color: #444;
     cursor: pointer;
     width: 100%;
@@ -71,38 +71,61 @@ button:hover {
     transition: 0.4s;
 }
 
-.accordion {
-    background-color: #eee;
-    color: #444;
-    cursor: pointer;
-    padding: 18px;
-    width: 100%;
-    text-align: left;
-    border: none;
-    outline: none;
-    transition: 0.4s;
+.panel {
+    display: none;
 }
 
-.active,
-.accordion:hover {
-    background-color: #ccc;
+.tab-content-container {
+    display: flex;
+    height: 100%;
+}
+.tab {
+    float: left;
+    background-color: #233142;
+    width: 20%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.tablinks {
+    display: block;
+    background-color: #455d7a;
+    height: 33.33%;
+    width: 100%;
+    border: none;
+    border-radius: 0px;
+    outline: none;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tablinks:hover {
+    background-color: #233142;
+}
+
+.tablinks.active {
+    background-color: #233142;
 }
 
 .active,
 .reviews-accordion:hover {
-    background-color: #ccc;
+    background-color: #455d7a;
 }
 
-.panel {
-    padding: 0 18px;
-    background-color: white;
+.tabContent {
+    padding: 0px 12px;
+    width: 100%;
+    border-left: none;
+    height: auto;
     display: none;
-    overflow: hidden;
 }
 
 .loading {
     border: 8px solid #f3f3f3;
-    border-top: 8px solid #ac78af;
+    border-top: 8px solid #f95959;
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -136,13 +159,13 @@ button:hover {
 }
 .ratings {
     height: auto;
-    background-color: rgb(210, 208, 208);
+    background-color: #455d7a;
     border-radius: 10px;
     margin-bottom: 10px;
 }
 
 .stars {
-    background-color: rgb(198, 105, 121);
+    background-color: #f95959;
     height: 10px;
     border-radius: 10px;
 }

@@ -26,76 +26,83 @@
         <div id="loading" class="loading hidden"></div>
 
         <div id="output" class="hidden">
-            <p id="businessInfo"></p>
-            <button class="accordion">Car Info</button>
-            <!-- work on a toggle toggle-sign -->
-            <!-- <span class="toggle-sign">+</span> -->
-            <div class="panel">
-                <p id="make"></p>
-                <p id="model"></p>
-                <p id="colour"></p>
-                <p id="fuel-type"></p>
-                <p id="registration-date"></p>
-                <p id="mileage"></p>
-                <p id="tax-status"></p>
-                <p id="outstanding-recall"></p>
-                <p id="mot-required"></p>
-                <p id="mot-due"></p>
-            </div>
-            <button class="accordion">Business Info</button>
-            <div class="panel">
-                <p>test 1</p>
-                <p>test 2</p>
-            </div>
-            <button class="accordion" id="expandReviews">
-                Show review data
-            </button>
-            <div id="mapReview" class="panel">
-                <p id="businessName"></p>
-                <p id="businessAddress"></p>
+            <div class="tab-content-container">
+                <div class="tab">
+                    <button class="tablinks" data-tab="Car">Car</button>
 
-                <div class="ratings-container">
-                    <div class="progress-container">
-                        <div class="ratings">
-                            <div id="five-stars" class="stars"></div>
-                        </div>
-                        <div class="ratings">
-                            <div id="four-stars" class="stars"></div>
-                        </div>
-                        <div class="ratings">
-                            <div id="three-stars" class="stars"></div>
-                        </div>
-                        <div class="ratings">
-                            <div id="two-stars" class="stars"></div>
-                        </div>
-                        <div class="ratings">
-                            <div id="one-stars" class="stars"></div>
-                        </div>
-                    </div>
-                    <div class="average-rating">
-                        <p style="font-size: x-large" id="averageRating"></p>
-                        <p id="reviewsCount"></p>
-                    </div>
+                    <button class="tablinks" data-tab="Business">
+                        Business
+                    </button>
+                    <button class="tablinks" data-tab="Reviews">Reviews</button>
+                </div>
+                <!-- work on a toggle toggle-sign -->
+                <!-- <span class="toggle-sign">+</span> -->
+                <div id="Car" class="tabContent">
+                    <p id="make"></p>
+                    <p id="model"></p>
+                    <p id="colour"></p>
+                    <p id="fuel-type"></p>
+                    <p id="registration-date"></p>
+                    <p id="mileage"></p>
+                    <p id="tax-status"></p>
+                    <p id="outstanding-recall"></p>
+                    <p id="mot-required"></p>
+                    <p id="mot-due"></p>
                 </div>
 
-                <div class="reviews-container">
-                    <button class="reviews-accordion">review 1</button>
-                    <div class="panel">
-                        <p id="username-1"></p>
-                        <p id="first-review"></p>
-                    </div>
-                    <button class="reviews-accordion">review 2</button>
-                    <div class="panel">
-                        <p id="username-2"></p>
-                        <p id="second-review"></p>
-                    </div>
-                    <button class="reviews-accordion">review 3</button>
-                    <div class="panel">
-                        <p id="username-3"></p>
-                        <p id="third-review"></p>
-                    </div>
+                <div id="Business" class="tabContent">
+                    <p id="businessInfo"></p>
                 </div>
 
+                <div id="Reviews" class="tabContent">
+                    <p id="businessName"></p>
+                    <p id="businessAddress"></p>
+
+                    <div class="ratings-container">
+                        <div class="progress-container">
+                            <div class="ratings">
+                                <div id="five-stars" class="stars"></div>
+                            </div>
+                            <div class="ratings">
+                                <div id="four-stars" class="stars"></div>
+                            </div>
+                            <div class="ratings">
+                                <div id="three-stars" class="stars"></div>
+                            </div>
+                            <div class="ratings">
+                                <div id="two-stars" class="stars"></div>
+                            </div>
+                            <div class="ratings">
+                                <div id="one-stars" class="stars"></div>
+                            </div>
+                        </div>
+                        <div class="average-rating">
+                            <p
+                                style="font-size: x-large"
+                                id="averageRating"
+                            ></p>
+                            <p id="reviewsCount"></p>
+                        </div>
+                    </div>
+
+                    <div class="reviews-container">
+                        <button class="reviews-accordion">review 1</button>
+                        <div class="panel">
+                            <p id="username-1"></p>
+                            <p id="first-review"></p>
+                        </div>
+                        <button class="reviews-accordion">review 2</button>
+                        <div class="panel">
+                            <p id="username-2"></p>
+                            <p id="second-review"></p>
+                        </div>
+                        <button class="reviews-accordion">review 3</button>
+                        <div class="panel">
+                            <p id="username-3"></p>
+                            <p id="third-review"></p>
+                        </div>
+                    </div>
+                </div>
                 <p id="noReviewsFound"></p>
             </div>
         </div>
@@ -103,6 +110,9 @@
         <script src="popup.js"></script>
         <script src="accordion.js"></script>
         <script src="reviews-accordion.js"></script>
-        <!-- <script src="results.js"></script> -->
+        <script
+            src="https://kit.fontawesome.com/a076d05399.js"
+            crossorigin="anonymous"
+        ></script>
     </body>
 </html>
