@@ -2,6 +2,7 @@ const request = require("supertest");
 const jestFetchMock = require("jest-fetch-mock");
 const googleVisionDataRaw = require("../test-responses/googleVisionAPIdata");
 const complexVisionData = require("../test-responses/googleVisionAPIComplex");
+const LicensePlateImage = require("../../models/licensePlateImage");
 
 const app = require("../../app");
 // const MapReview = require("../../models/mapReviews");
@@ -9,8 +10,9 @@ require("../mongodb_helper");
 jestFetchMock.enableFetchMocks();
 
 describe("/getLicensePlate", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         jestFetchMock.resetMocks();
+        await LicensePlateImage.deleteMany({});
     });
 
     afterEach(() => {

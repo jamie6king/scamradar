@@ -66,7 +66,6 @@ describe("MapReviews model", () => {
             mostRelevantReviews: mockMapFilteredJSON.mostRelevantReviews,
         }).save();
         const mapReviews = await MapReview.find({});
-        console.log(mapReviews);
         expect(mapReviews[0]._id).toEqual(mapReview._id);
     });
 });
