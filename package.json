@@ -6,5 +6,9 @@
         "dev": "npm --prefix=api run dev",
         "test": "npm --prefix=api run test",
         "eslint": "npm --prefix=api run eslint"
+    },
+    "dependencies": {
+        "axios": "^1.7.9",
+        "cheerio": "^1.0.0"
     }
 }
