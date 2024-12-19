@@ -109,16 +109,41 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
     if (message.type == "mapQueryData") {
         (async () => {
             try {
-                const data = await getMapReviews(message);
-                console.log("bgdata:: ", data.mapReviews);
-                chrome.storage.local.set(
-                    {
-                        mapQueryResults: data,
-                    },
-                    () => {
-                        console.log("Data stored in chrome storage");
-                    }
+                console.log("message data: ", message);
+                const response = await fetch(
+                    `http://localhost:3000/scrapeIframeUrl/getBusinessInfo?url=${encodeURIComponent(
+                        message.mapQueryData.iframeSrc
+                    )}`
                 );
+                if (response.ok) {
+                    const iframeData = await response.json();
+                    const updatedMessage = {
+                        mapQueryData: {
+                            companyName: iframeData.companyDetails.companyName,
+                            companyPostcode:
+                                iframeData.companyDetails.companyPostcode,
+                        },
+                    };
+                    const data = await getMapReviews(updatedMessage);
+                    chrome.storage.local.set(
+                        {
+                            mapQueryResults: data,
+                        },
+                        () => {
+                            console.log("Data stored in chrome storage");
+                        }
+                    );
+                } else {
+                    const data = await getMapReviews(message);
+                    chrome.storage.local.set(
+                        {
+                            mapQueryResults: data,
+                        },
+                        () => {
+                            console.log("Data stored in chrome storage");
+                        }
+                    );
+                }
             } catch (error) {
                 console.error("Error while fetching map reviews:", error);
                 chrome.runtime.sendMessage({
