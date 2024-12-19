@@ -195,9 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
     chrome.storage.local.get(["companyInfo"], (result) => {
-        alert(JSON.stringify(result));
         if (result.companyInfo) {
-            alert(JSON.stringify(result));
             document.getElementById("businessInfo").innerText =
                 JSON.stringify(result);
         }
