@@ -4,7 +4,7 @@
     "description": "Scrape information from listing page",
     "version": "1.0",
     "icons": {
-        "1": "images/icon.png"
+        "1": "images/radar.png"
     },
     "background": {
         "service_worker": "background.js"
