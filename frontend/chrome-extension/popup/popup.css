@@ -26,8 +26,14 @@ pre {
 }
 
 .response-box {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    /* justify-content: space-between; */
+    grid-template-columns: 75px 275px 50px;
+    align-items: center;
+}
+
+.response-text {
+    padding-left: 20px;
 }
 
 form {
