@@ -32,6 +32,13 @@ pre {
     align-items: center;
 }
 
+.business-response {
+    display: grid;
+    /* justify-content: space-between; */
+    grid-template-columns: 100px 300px;
+    align-items: center;
+}
+
 .response-text {
     padding-left: 20px;
 }
