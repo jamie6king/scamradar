@@ -17,6 +17,8 @@ function submitted(event) {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    const tick = "\u2713";
+    const cross = "\u2717";
     if (message.type === "results") {
         sendResponse({ status: "success" });
 
@@ -30,17 +32,82 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }, 1500);
 
         document.getElementById("make").innerText = response.make;
+        if (response.make.slice(0, 4) === "Pass") {
+            document.getElementById("make-tick-cross").innerText = tick;
+            document.getElementById("make-tick-cross").style.color = "green";
+        } else {
+            document.getElementById("make-tick-cross").innerText = cross;
+            document.getElementById("make-tick-cross").style.color = "#EF233C";
+        }
+
         document.getElementById("model").innerText = response.model;
+        if (response.model.slice(0, 4) === "Pass") {
+            document.getElementById("model-tick-cross").innerText = tick;
+            document.getElementById("model-tick-cross").style.color = "green";
+        } else {
+            document.getElementById("model-tick-cross").innerText = cross;
+            document.getElementById("model-tick-cross").style.color = "#EF233C";
+        }
+
         document.getElementById("colour").innerText = response.colour;
+        if (response.colour.slice(0, 4) === "Pass") {
+            document.getElementById("colour-tick-cross").innerText = tick;
+            document.getElementById("colour-tick-cross").style.color = "green";
+        } else {
+            document.getElementById("colour-tick-cross").innerText = cross;
+            document.getElementById("colour-tick-cross").style.color =
+                "#EF233C";
+        }
+
         document.getElementById("fuel-type").innerText = response.fuelType;
+
+        if (response.fuelType.slice(0, 4) === "Pass") {
+            document.getElementById("fuel-tick-cross").innerText = tick;
+            document.getElementById("fuel-tick-cross").style.color = "green";
+        } else {
+            document.getElementById("fuel-tick-cross").innerText = cross;
+            document.getElementById("fuel-tick-cross").style.color = "#EF233C";
+        }
         document.getElementById("registration-date").innerText =
             response.registrationDate;
+        if (response.registrationDate.slice(0, 4) === "Pass") {
+            document.getElementById("reg-tick-cross").innerText = tick;
+            document.getElementById("reg-tick-cross").style.color = "green";
+        } else {
+            document.getElementById("reg-tick-cross").innerText = cross;
+            document.getElementById("reg-tick-cross").style.color = "#EF233C";
+        }
+
         document.getElementById("mileage").innerText = response.mileage;
+
+        if (response.mileage.slice(0, 4) === "Pass") {
+            document.getElementById("milage-tick-cross").innerText = tick;
+            document.getElementById("milage-tick-cross").style.color = "green";
+        } else {
+            document.getElementById("milage-tick-cross").innerText = cross;
+            document.getElementById("milage-tick-cross").style.color =
+                "#EF233C";
+        }
+
         document.getElementById("tax-status").innerText = response.taxStatus;
+
+        if (response.taxStatus.slice(0, 5) === "Taxed") {
+            document.getElementById("tax-tick-cross").innerText = tick;
+            document.getElementById("tax-tick-cross").style.color = "green";
+        } else {
+            document.getElementById("tax-tick-cross").innerText = cross;
+            document.getElementById("tax-tick-cross").style.color = "#EF233C";
+        }
         document.getElementById("outstanding-recall").innerText =
             response.hasOutstandingRecall;
+        if (response.hasOutstandingRecall.slice(0, 3).toLowerCase() === "yes") {
+            document.getElementById("recall-tick-cross").innerText = cross;
+            document.getElementById("recall-tick-cross").style.color =
+                "#EF233C";
+        }
         // document.getElementById("mot-required").innerText = "MOT Required:\n" + (response.motRequired ? "Yes" : "No");
         document.getElementById("mot-due").innerText = newMotDate;
+
         // document.getElementById("mot-data").innerText = "MOT Failures:\n" + response.motFailures.map((failure) => failure);
     }
 });
@@ -125,11 +192,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
     chrome.storage.local.get(["companyInfo"], (result) => {
-        alert(JSON.stringify(result));
+        console.log("company results:   ", result);
+
         if (result.companyInfo) {
-            alert(JSON.stringify(result));
-            document.getElementById("businessInfo").innerText =
-                JSON.stringify(result);
+            const data = result.companyInfo.reportResults;
+            const companyDetails = {
+                name: data.company_name,
+                number: data.company_number,
+                status: data.company_status,
+                overdueAccounts: data.confirmation_statement.overdue,
+            };
+            document.getElementById("company-name").innerText =
+                companyDetails.name;
+            document.getElementById("company-number").innerText =
+                companyDetails.number;
+            document.getElementById("company-status").innerText =
+                companyDetails.status;
+            document.getElementById("company-accounts").innerText =
+                companyDetails.overdueAccounts;
         }
     });
 });
+
+// {"companyInfo":{"reportResults":{"company_name":"BERKSHIRE CAR PLANET LTD","company_number":"15357162","company_status":"active","confirmation_statement":{"next_due":"2024-12-30","next_made_up_to":"2024-12-16","overdue":false},"date_of_creation":"2023-12-17","has_charges":false}}}
