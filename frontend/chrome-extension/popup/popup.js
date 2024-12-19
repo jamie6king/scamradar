@@ -194,6 +194,17 @@ document.addEventListener("DOMContentLoaded", () => {
     chrome.storage.local.get(["companyInfo"], (result) => {
         console.log("company results:   ", result);
 
+        if (
+            result.companyInfo.reportResults === "Couldn't find companyNumber?"
+        ) {
+            document.getElementById("no-company-details").innerText =
+                "no data received";
+            document.getElementById("no-company-details-1").innerText =
+                "no data received";
+            document.getElementById("no-company-details-2").innerText =
+                "no data received";
+        }
+
         if (result.companyInfo) {
             const data = result.companyInfo.reportResults;
             const companyDetails = {
