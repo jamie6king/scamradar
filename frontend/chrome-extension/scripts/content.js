@@ -40,6 +40,7 @@ if (listingCategory == "Motors") {
 
     // Find business Info if the business seller element exists
     let businessSellerInfo = null;
+    let businessNumber = null;
 
     const businessSellerElement = document.querySelector(
         ".vim.d-business-seller"
@@ -58,6 +59,16 @@ if (listingCategory == "Motors") {
                 ".ux-section--selfCertification .ux-section__item span"
             )
             ?.textContent.trim();
+
+        let companyNumber = document.querySelector(
+            "#s0-1-26-7-17-1-93\\[1\\]-2-3-tabpanel-0 > div > div > div > div.vim.d-business-seller > div > div.ux-section.ux-section--crnInformation > div > div > ul > li > span"
+        );
+
+        if (companyNumber) {
+            businessNumber = companyNumber.textContent;
+        } else {
+            console.log("No company number found!");
+        }
 
         businessSellerInfo = {
             address,
@@ -164,6 +175,7 @@ if (listingCategory == "Motors") {
         price: price,
         isAuction: isAuction,
         businessInfo: businessSellerInfo,
+        businessNumber: businessNumber,
         sellerInfo: sellerInfo,
         vehicleData: vehicleData,
     };
@@ -187,6 +199,10 @@ if (listingCategory == "Motors") {
         chrome.runtime.sendMessage({
             type: "mapQueryData",
             mapQueryData: mapQueryData,
+        });
+        chrome.runtime.sendMessage({
+            type: "businessNumberData",
+            businessNumber: businessNumber,
         });
     }
 
