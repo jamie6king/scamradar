@@ -124,8 +124,12 @@ describe("/getLicensePlate", () => {
             expect(response.body.mostCommonPlate).toEqual("WD66 HXS");
         });
         it("returns license plates from more complex data", async () => {
-            const mockData = complexVisionData;
-            jestFetchMock.mockResponse(JSON.stringify(mockData));
+            const mockData1 = complexVisionData;
+            const mockData2 = {
+                responses: [{}],
+            };
+            jestFetchMock.mockResponseOnce(JSON.stringify(mockData2));
+            jestFetchMock.mockResponse(JSON.stringify(mockData1));
 
             const imgArray = [
                 "https://i.ebayimg.com/images/g/slEAAOSwDD5nYECl/s-l1600.webp",
