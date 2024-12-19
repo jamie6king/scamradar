@@ -173,7 +173,42 @@ if (listingCategory == "Motors") {
     // const currentUrl = window.location.href;
     const iframe = document?.getElementById('desc_ifr');
     const iframeSrc = iframe.getAttribute('src');
-    console.log('Iframe src:', iframeSrc);
+    // console.log('Iframe src:', iframeSrc);
+
+    const ebayAccountAge = document?.querySelector('#STORE_INFORMATION .ux-icon-text__text span').textContent
+    // console.log("Ebay Account Age: ", ebayAccountAge)
+
+    function getAccountAge(joinedText) {
+        const match = joinedText.match(/Joined (\w+) (\d{4})/);
+        if (!match) return false;
+    
+        const monthName = match[1];
+        const year = match[2];
+        const monthMap = {
+            Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6,
+            Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12
+        };
+    
+        const month = monthMap[monthName];
+        const joinedDate = new Date(year, month - 1);
+        const currentDate = new Date();
+        const diffMonths = (currentDate.getFullYear() - joinedDate.getFullYear()) * 12 + currentDate.getMonth() - joinedDate.getMonth();
+        
+        if (diffMonths < 6) {
+            return "eBay account less than 6 months old";
+        } else {
+            return "eBay account more than 6 months old";
+        }
+    }
+
+    if (ebayAccountAge) {
+        const accountAgeWarning = getAccountAge(ebayAccountAge);
+        chrome.storage.local.set(
+            {
+                accountAgeWarning: accountAgeWarning,
+            });
+        console.log('Account Age Warning stored in localStorage');
+    }
 
 
     const scrapedData = {

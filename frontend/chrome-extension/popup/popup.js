@@ -212,6 +212,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 companyDetails.overdueAccounts;
         }
     });
+    chrome.storage.local.get(["accountAgeWarning"], (result) => {
+        if (result.accountAgeWarning) {
+            document.getElementById("account-age").innerText =
+            result.accountAgeWarning;
+        }
+    });
 });
+
+
 
 // {"companyInfo":{"reportResults":{"company_name":"BERKSHIRE CAR PLANET LTD","company_number":"15357162","company_status":"active","confirmation_statement":{"next_due":"2024-12-30","next_made_up_to":"2024-12-16","overdue":false},"date_of_creation":"2023-12-17","has_charges":false}}}
