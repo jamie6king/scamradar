@@ -45,9 +45,6 @@ const getLicensePlate = async (req, res) => {
 };
 
 const processImgText = (imgText) => {
-    if (Object.keys(imgText.responses[0]).length === 0) {
-        return;
-    }
     const isolatedText = imgText.responses[0].textAnnotations[0].description;
     const isoTextSpaces = isolatedText.replace(/\n/g, " ");
     const regex =
