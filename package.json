@@ -6,5 +6,8 @@
         "dev": "npm --prefix=api run dev",
         "test": "npm --prefix=api run test",
         "eslint": "npm --prefix=api run eslint"
+    },
+    "dependencies": {
+        "i": "^0.3.7"
     }
 }
