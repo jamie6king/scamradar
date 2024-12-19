@@ -44,7 +44,7 @@ async function carReport(req, res) {
             if (dvlaResponse.make === vehicleData.make.toUpperCase()) {
                 return "Pass";
             } else {
-                return `Fail: should be ${dvlaResponse.make}`;
+                return `Fail: ${vehicleData.make} should be ${dvlaResponse.make}`;
             }
         },
         model: () => {
@@ -57,7 +57,7 @@ async function carReport(req, res) {
             ) {
                 return "Pass";
             } else {
-                return `Fail: should be ${dvsaResponse.model.toUpperCase()}`;
+                return `Fail: ${vehicleData.model.toUpperCase()} should be ${dvsaResponse.model.toUpperCase()}`;
             }
         },
         colour: () => {
@@ -67,7 +67,7 @@ async function carReport(req, res) {
             if (dvlaResponse.colour === vehicleData.colour.toUpperCase()) {
                 return "Pass";
             } else {
-                return `Fail: should be ${dvlaResponse.colour}`;
+                return `Fail: ${vehicleData.colour} should be ${dvlaResponse.colour}`;
             }
         },
         fuelType: () => {
@@ -77,7 +77,7 @@ async function carReport(req, res) {
             if (dvlaResponse.fuelType === vehicleData.fuelType.toUpperCase()) {
                 return "Pass";
             } else {
-                return `Fail: should be ${dvlaResponse.fuelType}`;
+                return `Fail: ${vehicleData.fuelType} should be ${dvlaResponse.fuelType}`;
             }
         },
         registrationDate: () => {
@@ -90,7 +90,7 @@ async function carReport(req, res) {
             ) {
                 return "Pass";
             } else {
-                return `Fail: should be ${dvsaResponse.registrationDate.slice(0, 4)}`;
+                return `Fail: ${vehicleData.registrationDate} should be ${dvsaResponse.registrationDate.slice(0, 4)}`;
             }
         },
         mileage: () => {
@@ -104,7 +104,7 @@ async function carReport(req, res) {
             ) {
                 return "Pass";
             } else {
-                return `Fail: should be ${dvsaResponse.motTests[0].odometerValue} miles`;
+                return `Fail: ${vehicleData.mileage} miles is less than last MOT reading: ${dvsaResponse.motTests[0].odometerValue} miles`;
             }
         },
         taxStatus: () => {
